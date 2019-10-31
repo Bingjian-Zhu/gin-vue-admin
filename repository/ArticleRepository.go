@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
 )
@@ -8,50 +10,55 @@ import (
 //ArticleRepository 注入IDb
 type ArticleRepository struct {
 	Source datasource.IDb `inject:""`
+	Base   BaseRepository `inject:"inline"`
 }
-
-// //GetArticle 根据id获取Article
-// func (a *ArticleRepository) GetArticle(id int) (article models.Article) {
-// 	a.Source.DB().Where("id = ?", id).First(&article)
-// 	a.Source.DB().Where("id = ?", article.TagID).First(&article.Tag)
-// 	//db.Model(&article).Related(&article.Tag)
-// 	return
-// }
 
 //GetArticles 分页返回Articles
 func (a *ArticleRepository) GetArticles(PageNum int, PageSize int, maps map[string]interface{}) *[]models.Article {
 	var articles []models.Article
-	a.Source.DB().Where(maps).Offset(PageNum).Limit(PageSize).Find(&articles)
+	var total uint64
+	err := a.Base.GetPage(&models.Article{}, &articles, PageNum, PageSize, &total, maps)
+	if err != nil {
+		fmt.Println(err)
+	}
 	return &articles
 }
 
-// //AddArticle 新增Article
-// func (a *ArticleRepository) AddArticle(article models.Article) bool {
-// 	a.Source.DB().Create(article)
-// 	return true
-// }
+//GetArticle 根据id获取Article
+func (a *ArticleRepository) GetArticle(id int) (article models.Article) {
+	a.Source.DB().Where("id = ?", id).First(&article)
+	a.Source.DB().Where("id = ?", article.TagID).First(&article.Tag)
+	//db.Model(&article).Related(&article.Tag)
+	return
+}
 
-// //EditArticle 编辑Article
-// func (a *ArticleRepository) EditArticle(article models.Article) bool {
-// 	a.Source.DB().Model(&models.Article{}).Where("id = ?", article.ID).Update(article)
-// 	return true
-// }
+//AddArticle 新增Article
+func (a *ArticleRepository) AddArticle(article models.Article) bool {
+	a.Source.DB().Create(article)
+	return true
+}
 
-// //DeleteArticle 删除Article
-// func (a *ArticleRepository) DeleteArticle(id int) bool {
-// 	a.Source.DB().Where("id = ?", id).Delete(&models.Article{})
-// 	return true
-// }
+//EditArticle 编辑Article
+func (a *ArticleRepository) EditArticle(article models.Article) bool {
+	a.Source.DB().Model(&models.Article{}).Where("id = ?", article.ID).Update(article)
+	return true
+}
 
-// //ExistArticleByID 根据ID判断Article是否存在
-// func (a *ArticleRepository) ExistArticleByID(id int) bool {
-// 	var article models.Article
-// 	a.Source.DB().Select("id").Where("id = ?", id).First(&article)
-// 	if article.ID > 0 {
-// 		return true
-// 	}
-// 	return false
-// }
+//DeleteArticle 删除Article
+func (a *ArticleRepository) DeleteArticle(id int) bool {
+	a.Source.DB().Where("id = ?", id).Delete(&models.Article{})
+	return true
+}
+
+//ExistArticleByID 根据ID判断Article是否存在
+func (a *ArticleRepository) ExistArticleByID(id int) bool {
+	var article models.Article
+	a.Source.DB().Select("id").Where("id = ?", id).First(&article)
+	if article.ID > 0 {
+		return true
+	}
+	return false
+}
 
 //GetArticleTotal 获取Article总数
 func (a *ArticleRepository) GetArticleTotal(maps map[string]interface{}) (count int) {

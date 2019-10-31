@@ -17,7 +17,7 @@ export function getInfo() {
 
 export function refreshToken() {
   return request({
-    url: '/auth/refresh_token',
+    url: '/user/refresh_token',
     method: 'get'
   })
 }

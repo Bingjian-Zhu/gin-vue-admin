@@ -46,12 +46,10 @@ func Configure(r *gin.Engine) {
 		&inject.Object{Value: &user},
 		&inject.Object{Value: &repository.UserRepository{}},
 		//&inject.Object{Value: &service.UserService{}},
-		//&inject.Object{Value: &tag},
-		//&inject.Object{Value: &repository.TagRepository{}},
-		//&inject.Object{Value: &service.TagService{}},
 		&inject.Object{Value: &repository.ClaimRepository{}},
 		//&inject.Object{Value: &service.ClaimService{}},
 		&inject.Object{Value: &myjwt},
+		&inject.Object{Value: &repository.BaseRepository{}},
 	)
 	if err != nil {
 		log.Fatal("inject fatal: ", err)
@@ -65,19 +63,16 @@ func Configure(r *gin.Engine) {
 		log.Fatal("db fatal:", err)
 	}
 	var authMiddleware = myjwt.GinJWTMiddlewareInit(jwt.AllUserAuthorizator)
-	r.POST("/login", authMiddleware.LoginHandler)
 	r.NoRoute(authMiddleware.MiddlewareFunc(), jwt.NoRouteHandler)
-	refreshToken := r.Group("/auth")
+	r.POST("/login", authMiddleware.LoginHandler)
+	userAPI := r.Group("/user")
 	{
-		// Refresh time can be longer than token timeout
-		refreshToken.GET("/refresh_token", authMiddleware.RefreshHandler)
+		userAPI.GET("/refresh_token", authMiddleware.RefreshHandler)
 	}
-
-	api := r.Group("/user")
-	api.Use(authMiddleware.MiddlewareFunc())
+	userAPI.Use(authMiddleware.MiddlewareFunc())
 	{
-		api.GET("/info", user.GetUserInfo)
-		api.POST("/logout", user.Logout)
+		userAPI.GET("/info", user.GetUserInfo)
+		userAPI.POST("/logout", user.Logout)
 	}
 
 	var adminMiddleware = myjwt.GinJWTMiddlewareInit(jwt.AdminAuthorizator)
@@ -87,10 +82,6 @@ func Configure(r *gin.Engine) {
 	{
 		//vue获取table信息
 		apiv1.GET("/table/list", article.GetArticles)
-		// apiv1.GET("/tags", tag.GetTags)
-		// apiv1.POST("/tags", tag.AddTag)
-		// apiv1.PUT("/tags/:id", tag.EditTag)
-		// apiv1.DELETE("/tags/:id", tag.DeleteTag)
 
 		// apiv1.GET("/articles", article.GetArticles)
 		// apiv1.GET("/articles/:id", article.GetArticle)

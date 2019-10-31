@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
 )
@@ -8,17 +10,19 @@ import (
 //UserRepository 注入IDb
 type UserRepository struct {
 	Source datasource.IDb `inject:""`
+	Base   BaseRepository `inject:"inline"`
 }
 
 //CheckUser 身份验证
 func (a *UserRepository) CheckUser(username string, password string) bool {
 	var user models.User
-	a.Source.DB().Select("id").Where(models.User{Username: username, Password: password}).First(&user)
-	if user.ID > 0 {
-		return true
+	where := models.User{Username: username, Password: password}
+	err := a.Base.First(&where, &user)
+	if err != nil {
+		fmt.Println(err)
+		return false
 	}
-
-	return false
+	return true
 }
 
 //GetUserAvatar 获取用户头像

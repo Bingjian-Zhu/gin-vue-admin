@@ -23,8 +23,8 @@
 ├── vue-admin Vue前端页面代码
 </code></pre>
 
-### 下载项目
-go get github.com/bingjian-zhu/gin-vue-admin/cmd
+### 下载安装项目
+`go get github.com/bingjian-zhu/gin-vue-admin/cmd`
 
 ### go后台程序运行方式
 
