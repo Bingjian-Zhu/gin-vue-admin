@@ -1,0 +1,176 @@
+package controller
+
+import (
+	"log"
+	"net/http"
+	"strconv"
+
+	"github.com/astaxie/beego/validation"
+	"github.com/gin-gonic/gin"
+
+	"github.com/bingjian-zhu/gin-vue-admin/common/codes"
+	"github.com/bingjian-zhu/gin-vue-admin/page/emun"
+	pageModels "github.com/bingjian-zhu/gin-vue-admin/page/models"
+	"github.com/bingjian-zhu/gin-vue-admin/service"
+)
+
+// Article 注入IArticleService
+type Article struct {
+	Service service.IArticleService `inject:""`
+	//TagService     service.ITagService     `inject:""`
+}
+
+// //GetArticle 获取单个文章
+// func (a *Article) GetArticle(c *gin.Context) {
+// 	id, _ := strconv.Atoi(c.Param("id"))
+// 	valid := validation.Validation{}
+// 	valid.Min(id, 1, "id").Message("ID必须大于0")
+// 	var data models.Article
+// 	code := codes.InvalidParams
+// 	if !valid.HasErrors() {
+// 		if a.Service.ExistArticleByID(id) {
+// 			data = a.Service.GetArticle(id)
+// 			code = codes.SUCCESS
+// 		} else {
+// 			code = codes.ErrNotExistArticle
+// 		}
+// 	} else {
+// 		for _, err := range valid.Errors {
+// 			log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+// 		}
+// 	}
+// 	res.RespData(c, http.StatusOK, code, &data)
+// }
+
+//GetArticles 获取多个文章
+func (a *Article) GetArticles(c *gin.Context) {
+	maps := make(map[string]interface{})
+	valid := validation.Validation{}
+
+	var state int = -1
+	if arg := c.Query("state"); arg != "" {
+		state, _ = strconv.Atoi(arg)
+		maps["state"] = state
+
+		valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
+	}
+
+	var tagID int = -1
+	if arg := c.Query("tag_id"); arg != "" {
+		tagID, _ = strconv.Atoi(arg)
+		maps["tag_id"] = tagID
+
+		valid.Min(tagID, 1, "tag_id").Message("标签ID必须大于0")
+	}
+	code := codes.InvalidParams
+	var viewArticles []pageModels.Article
+	var viewArticle pageModels.Article
+	if !valid.HasErrors() {
+		code = codes.SUCCESS
+		articles := a.Service.GetArticles(GetPage(c), maps)
+		for _, article := range *articles {
+			viewArticle.Id = article.ID
+			viewArticle.Author = article.CreatedBy
+			viewArticle.DisplayTime = article.ModifiedOn.String()
+			viewArticle.Pageviews = 3474
+			viewArticle.Status = emun.GetArticleStatus(article.State)
+			viewArticle.Title = article.Title
+			viewArticles = append(viewArticles, viewArticle)
+		}
+	} else {
+		for _, err := range valid.Errors {
+			log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+		}
+	}
+	RespData(c, http.StatusOK, code, &viewArticles)
+}
+
+// //AddArticle 新增文章
+// func (a *Article) AddArticle(c *gin.Context) {
+// 	model := models.Article{}
+// 	code := codes.InvalidParams
+// 	err := c.Bind(&model)
+// 	if err == nil {
+// 		valid := validation.Validation{}
+// 		valid.Min(model.TagID, 1, "tag_id").Message("标签ID必须大于0")
+// 		valid.Required(model.Title, "title").Message("标题不能为空")
+// 		valid.Required(model.Desc, "desc").Message("简述不能为空")
+// 		valid.Required(model.Content, "content").Message("内容不能为空")
+// 		valid.Required(model.CreatedBy, "created_by").Message("创建人不能为空")
+// 		valid.Range(model.State, 0, 1, "state").Message("状态只允许0或1")
+// 		if !valid.HasErrors() {
+// 			if a.TagService.ExistTagByID(model.TagID) {
+// 				if a.ArticleService.AddArticle(model) {
+// 					code = codes.SUCCESS
+// 				} else {
+// 					code = codes.ERROR
+// 				}
+// 			} else {
+// 				code = code.ErrNotExistTag
+// 			}
+// 		} else {
+// 			for _, err := range valid.Errors {
+// 				log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+// 			}
+// 		}
+// 	}
+
+// 	res.RespOk(c, http.StatusOK, code)
+// }
+
+// //EditArticle 修改文章
+// func (a *Article) EditArticle(c *gin.Context) {
+// 	model := models.Article{}
+// 	code := codes.InvalidParams
+// 	err := c.Bind(&model)
+// 	if err == nil {
+// 		valid := validation.Validation{}
+// 		valid.Min(model.ID, 1, "id").Message("ID必须大于0")
+// 		valid.MaxSize(model.Title, 100, "title").Message("标题最长为100字符")
+// 		valid.MaxSize(model.Desc, 255, "desc").Message("简述最长为255字符")
+// 		valid.MaxSize(model.Content, 65535, "content").Message("内容最长为65535字符")
+// 		valid.Required(model.ModifiedBy, "modified_by").Message("修改人不能为空")
+// 		valid.MaxSize(model.ModifiedBy, 100, "modified_by").Message("修改人最长为100字符")
+// 		valid.Range(model.State, 0, 1, "state").Message("状态只允许0或1")
+// 		if !valid.HasErrors() {
+// 			if a.ArticleService.ExistArticleByID(model.ID) {
+// 				if a.TagService.ExistTagByID(model.TagID) {
+// 					a.ArticleService.EditArticle(model)
+// 					code = codes.SUCCESS
+// 				} else {
+// 					code = codes.ErrNotExistTag
+// 				}
+// 			} else {
+// 				code = codes.ErrNotExistArticle
+// 			}
+// 		} else {
+// 			for _, err := range valid.Errors {
+// 				log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+// 			}
+// 		}
+// 	}
+// 	res.RespOk(c, http.StatusOK, code)
+// }
+
+// //DeleteArticle 删除文章
+// func (a *Article) DeleteArticle(c *gin.Context) {
+// 	id, _ := strconv.Atoi(c.Param("id"))
+
+// 	valid := validation.Validation{}
+// 	valid.Min(id, 1, "id").Message("ID必须大于0")
+
+// 	code := codes.InvalidParams
+// 	if !valid.HasErrors() {
+// 		if a.Service.ExistArticleByID(id) {
+// 			a.Service.DeleteArticle(id)
+// 			code = codes.SUCCESS
+// 		} else {
+// 			code = codes.ErrNotExistArticle
+// 		}
+// 	} else {
+// 		for _, err := range valid.Errors {
+// 			log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+// 		}
+// 	}
+// 	res.RespOk(c, http.StatusOK, code)
+// }
