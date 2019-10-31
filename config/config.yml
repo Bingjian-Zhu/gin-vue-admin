@@ -11,11 +11,11 @@ app:
 
 database:
   type: mysql
-  user: root
-  password: Zbj123
+  user: gin
+  password: Gin123
   host: 127.0.0.1:3306
-  name: blog
-  table-prefix: blog_
+  name: gin-vue
+  table-prefix: go_
 
 redis:
   addr: 127.0.0.1:6379
