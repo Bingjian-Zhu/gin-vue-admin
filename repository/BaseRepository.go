@@ -69,8 +69,11 @@ func (b *BaseRepository) First(where interface{}, out interface{}, selects ...st
 }
 
 // Find 根据条件返回数据
-func (b *BaseRepository) Find(where interface{}, out interface{}, orders ...string) error {
+func (b *BaseRepository) Find(where interface{}, out interface{}, sel string, orders ...string) error {
 	db := b.Source.DB().Where(where)
+	if sel != "" {
+		db = db.Select(sel)
+	}
 	if len(orders) > 0 {
 		for _, order := range orders {
 			db = db.Order(order)

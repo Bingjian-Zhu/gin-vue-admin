@@ -40,11 +40,18 @@ func (a *UserRepository) GetUserAvatar(username string) string {
 
 //GetRoles 获取用户角色
 func (a *UserRepository) GetRoles(username string) []string {
+	var roles []string
 	var user models.User
-	a.Source.DB().Select("id").Where(models.User{Username: username}).First(&user)
+	where := models.User{Username: username}
+	sel := "id"
+	err := a.Base.First(&where, &user, sel)
+	if err != nil {
+		fmt.Println(err)
+		return roles
+	}
+
 	var claims []models.Claims
 	a.Source.DB().Select("value").Where(models.Claims{UserID: user.ID}).Find(&claims)
-	var roles []string
 	for _, claim := range claims {
 		roles = append(roles, claim.Value)
 	}
