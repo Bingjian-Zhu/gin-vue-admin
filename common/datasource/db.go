@@ -37,7 +37,7 @@ func (d *Db) Connect() error {
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 		return conf.TablePrefix + defaultTableName
 	}
-	db.LogMode(true)
+	db.LogMode(true) //打印SQL语句
 	db.SingularTable(true)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
