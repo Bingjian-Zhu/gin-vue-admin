@@ -58,9 +58,14 @@ func (b *BaseRepository) DeleteByIDS(model interface{}, ids []uint64) (count int
 }
 
 // First 根据条件获取一个实体
-func (b *BaseRepository) First(where interface{}, out interface{}) error {
-	err := b.Source.DB().Where(where).First(out).Error
-	return err
+func (b *BaseRepository) First(where interface{}, out interface{}, selects ...string) error {
+	db := b.Source.DB().Where(where)
+	if len(selects) > 0 {
+		for _, sel := range selects {
+			db = db.Select(sel)
+		}
+	}
+	return db.First(out).Error
 }
 
 // Find 根据条件返回数据

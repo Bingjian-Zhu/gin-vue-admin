@@ -28,7 +28,13 @@ func (a *UserRepository) CheckUser(username string, password string) bool {
 //GetUserAvatar 获取用户头像
 func (a *UserRepository) GetUserAvatar(username string) string {
 	var user models.User
-	a.Source.DB().Select("avatar").Where(models.User{Username: username}).First(&user)
+	where := models.User{Username: username}
+	sel := "avatar"
+	err := a.Base.First(&where, &user, sel)
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
 	return user.Avatar
 }
 
