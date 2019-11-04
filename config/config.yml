@@ -7,6 +7,7 @@ app:
   #run-mode:debug/release
   run-mode: debug
   pagesize: 10
+  log-path: ../log/debug.log
   identity-key: idname
 
 database:

@@ -2,11 +2,13 @@ package repository
 
 import (
 	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
+	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 )
 
-//BaseRepository 注入IDb
+//BaseRepository 注入IDb,Logger
 type BaseRepository struct {
 	Source datasource.IDb `inject:""`
+	Log    logger.ILogger `inject:""`
 }
 
 // Create 创建实体
@@ -29,6 +31,7 @@ func (b *BaseRepository) DeleteByWhere(model, where interface{}) (count int64, e
 	db := b.Source.DB().Where(where).Delete(model)
 	err = db.Error
 	if err != nil {
+		b.Log.Errorf("删除实体出错", err)
 		return
 	}
 	count = db.RowsAffected
@@ -40,6 +43,7 @@ func (b *BaseRepository) DeleteByID(model interface{}, id uint64) (count int64, 
 	db := b.Source.DB().Where("id=?", id).Delete(model)
 	err = db.Error
 	if err != nil {
+		b.Log.Errorf("删除实体出错", err)
 		return
 	}
 	count = db.RowsAffected
@@ -51,6 +55,7 @@ func (b *BaseRepository) DeleteByIDS(model interface{}, ids []uint64) (count int
 	db := b.Source.DB().Where("id in (?)", ids).Delete(model)
 	err = db.Error
 	if err != nil {
+		b.Log.Errorf("删除多个实体出错", err)
 		return
 	}
 	count = db.RowsAffected
@@ -93,6 +98,7 @@ func (b *BaseRepository) GetPage(model interface{}, out interface{}, pageIndex, 
 	}
 	err := db.Count(totalCount).Error
 	if err != nil {
+		b.Log.Errorf("查询总数出错", err)
 		return err
 	}
 	if *totalCount == 0 {

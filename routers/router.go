@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
+	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/common/middleware/cors"
-
 	"github.com/bingjian-zhu/gin-vue-admin/common/middleware/jwt"
 	"github.com/bingjian-zhu/gin-vue-admin/common/setting"
 	"github.com/bingjian-zhu/gin-vue-admin/controller"
@@ -36,11 +36,13 @@ func Configure(r *gin.Engine) {
 	//inject declare
 	var article controller.Article
 	db := datasource.Db{}
+	zap := logger.Logger{}
 	//Injection
 	var injector inject.Graph
 	err := injector.Provide(
 		&inject.Object{Value: &article},
 		&inject.Object{Value: &db},
+		&inject.Object{Value: &zap},
 		&inject.Object{Value: &repository.ArticleRepository{}},
 		&inject.Object{Value: &service.ArticleService{}},
 		&inject.Object{Value: &user},
@@ -57,6 +59,8 @@ func Configure(r *gin.Engine) {
 	if err := injector.Populate(); err != nil {
 		log.Fatal("injector fatal: ", err)
 	}
+	//zap log init
+	zap.Init()
 	//database connect
 	err = db.Connect()
 	if err != nil {

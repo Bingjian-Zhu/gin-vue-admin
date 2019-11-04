@@ -34,6 +34,7 @@ type APP struct {
 	RunMode     string `yaml:"run-mode"`
 	Pagesize    int    `yaml:"pagesize"`
 	IdentityKey string `yaml:"identity-key"`
+	LogPath     string `yaml:"log-path"`
 }
 
 //Database 数据库配置结构体

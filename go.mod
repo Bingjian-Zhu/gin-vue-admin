@@ -12,8 +12,9 @@ require (
 	github.com/facebookgo/subset v0.0.0-20150612182917-8dac2c3c4870 // indirect
 	github.com/gin-gonic/gin v1.4.0
 	github.com/jinzhu/gorm v1.9.11
-	github.com/kr/pretty v0.1.0 // indirect
 	github.com/tidwall/gjson v1.3.2 // indirect
+	go.uber.org/zap v1.12.0
 	golang.org/x/sys v0.0.0-20190507160741-ecd444e8653b // indirect
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gopkg.in/yaml.v2 v2.2.2
 )

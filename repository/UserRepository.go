@@ -4,12 +4,14 @@ import (
 	"fmt"
 
 	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
+	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
 )
 
 //UserRepository 注入IDb
 type UserRepository struct {
 	Source datasource.IDb `inject:""`
+	Log    logger.ILogger `inject:""`
 	Base   BaseRepository `inject:"inline"`
 }
 
@@ -19,7 +21,7 @@ func (a *UserRepository) CheckUser(username string, password string) bool {
 	where := models.User{Username: username, Password: password}
 	err := a.Base.First(&where, &user)
 	if err != nil {
-		fmt.Println(err)
+		a.Log.Errorf("用户名或密码错误", err)
 		return false
 	}
 	return true
