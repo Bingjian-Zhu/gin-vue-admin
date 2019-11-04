@@ -3,11 +3,11 @@ package controller
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
-	"github.com/appleboy/gin-jwt/v2"
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/bingjian-zhu/gin-vue-admin/common/codes"
-	"github.com/bingjian-zhu/gin-vue-admin/service"
 	"github.com/bingjian-zhu/gin-vue-admin/page/models"
+	"github.com/bingjian-zhu/gin-vue-admin/service"
+	"github.com/gin-gonic/gin"
 )
 
 //### 如果是使用Go Module,gin-jwt模块应使用v2
@@ -24,8 +24,8 @@ type User struct {
 
 //GetUserInfo 根据token获取用户信息
 func (a *User) GetUserInfo(c *gin.Context) {
-	claims := jwt.ExtractClaims(c)
-	userName := claims["userName"].(string)
+	roles := jwt.ExtractClaims(c)
+	userName := roles["userName"].(string)
 	avatar := a.Service.GetUserAvatar(userName)
 	code := codes.SUCCESS
 	userRoles := a.Service.GetRoles(userName)

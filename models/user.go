@@ -6,10 +6,12 @@ type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Avatar   string `json:"avatar"`
+	Deleted  int    `json:"deteled"`
+	State    int    `json:"state"`
 }
 
-// UserClaim 用户身份结构体
-type UserClaim struct {
-	UserName   string
-	UserClaims []Claims
+// UserRole 用户身份结构体
+type UserRole struct {
+	UserName  string
+	UserRoles []Role
 }

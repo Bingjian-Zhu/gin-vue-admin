@@ -52,10 +52,10 @@ func (a *UserRepository) GetRoles(username string) []string {
 		return roles
 	}
 
-	var claims []models.Claims
-	a.Source.DB().Select("value").Where(models.Claims{UserID: user.ID}).Find(&claims)
-	for _, claim := range claims {
-		roles = append(roles, claim.Value)
+	var arrRole []models.Role
+	a.Source.DB().Select("value").Where(models.Role{UserID: user.ID}).Find(&arrRole)
+	for _, role := range arrRole {
+		roles = append(roles, role.Value)
 	}
 	return roles
 }

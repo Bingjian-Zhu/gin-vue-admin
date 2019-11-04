@@ -24,8 +24,8 @@ import (
 
 // JWT 注入IService
 type JWT struct {
-	UserService  repository.IUserRepository  `inject:""`
-	ClaimService repository.IClaimRepository `inject:""`
+	UserService repository.IUserRepository `inject:""`
+	RoleService repository.IRoleRepository `inject:""`
 }
 
 //JwtAuthorizator 定义身份授权事件类型
@@ -43,28 +43,28 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator JwtAuthorizator) (authMiddlew
 		MaxRefresh:  time.Hour,
 		IdentityKey: app.IdentityKey,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
-			if v, ok := data.(*models.UserClaim); ok {
-				//get claims from username
-				v.UserClaims = j.ClaimService.GetUserClaims(v.UserName)
-				jsonClaim, _ := json.Marshal(v.UserClaims)
+			if v, ok := data.(*models.UserRole); ok {
+				//get roles from username
+				v.UserRoles = j.RoleService.GetUserRoles(v.UserName)
+				jsonRole, _ := json.Marshal(v.UserRoles)
 				//maps the claims in the JWT
 				return jwt.MapClaims{
-					"userName":   v.UserName,
-					"userClaims": helper.B2S(jsonClaim),
+					"userName":  v.UserName,
+					"userRoles": helper.B2S(jsonRole),
 				}
 			}
 			return jwt.MapClaims{}
 		},
 		IdentityHandler: func(c *gin.Context) interface{} {
-			claims := jwt.ExtractClaims(c)
-			//extracts identity from claims
-			jsonClaim := claims["userClaims"].(string)
-			var userClaims []models.Claims
-			json.Unmarshal(helper.S2B(jsonClaim), &userClaims)
+			roles := jwt.ExtractClaims(c)
+			//extracts identity from roles
+			jsonRole := roles["userRoles"].(string)
+			var userRoles []models.Role
+			json.Unmarshal(helper.S2B(jsonRole), &userRoles)
 			//Set the identity
-			return &models.UserClaim{
-				UserName:   claims["userName"].(string),
-				UserClaims: userClaims,
+			return &models.UserRole{
+				UserName:  roles["userName"].(string),
+				UserRoles: userRoles,
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -76,7 +76,7 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator JwtAuthorizator) (authMiddlew
 			userID := loginVals.Username
 			password := loginVals.Password
 			if j.UserService.CheckUser(userID, password) {
-				return &models.UserClaim{
+				return &models.UserRole{
 					UserName: userID,
 				}, nil
 			}
@@ -119,9 +119,9 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator JwtAuthorizator) (authMiddlew
 
 //AdminAuthorizator role is admin can access
 func AdminAuthorizator(data interface{}, c *gin.Context) bool {
-	if v, ok := data.(*models.UserClaim); ok {
-		for _, itemClaim := range v.UserClaims {
-			if itemClaim.Type == "role" && itemClaim.Value == "admin" {
+	if v, ok := data.(*models.UserRole); ok {
+		for _, itemRole := range v.UserRoles {
+			if itemRole.Value == "admin" {
 				return true
 			}
 		}
@@ -132,7 +132,7 @@ func AdminAuthorizator(data interface{}, c *gin.Context) bool {
 
 //TestAuthorizator username is test can access
 func TestAuthorizator(data interface{}, c *gin.Context) bool {
-	if v, ok := data.(*models.UserClaim); ok && v.UserName == "test" {
+	if v, ok := data.(*models.UserRole); ok && v.UserName == "test" {
 		return true
 	}
 

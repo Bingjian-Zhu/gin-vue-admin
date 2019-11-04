@@ -12,7 +12,7 @@ app:
 
 database:
   type: mysql
-  user: gin
+  user: ginVue
   password: Gin123
   host: 127.0.0.1:3306
   name: gin-vue

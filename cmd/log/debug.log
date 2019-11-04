@@ -1,1 +1,0 @@
-{"level":"error","ts":"2019-11-04T14:59:07.403+0800","caller":"repository/UserRepository.go:24","msg":"用户名或密码错误%!(EXTRA *errors.errorString=record not found)"}

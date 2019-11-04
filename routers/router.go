@@ -48,8 +48,8 @@ func Configure(r *gin.Engine) {
 		&inject.Object{Value: &user},
 		&inject.Object{Value: &repository.UserRepository{}},
 		//&inject.Object{Value: &service.UserService{}},
-		&inject.Object{Value: &repository.ClaimRepository{}},
-		//&inject.Object{Value: &service.ClaimService{}},
+		&inject.Object{Value: &repository.RoleRepository{}},
+		//&inject.Object{Value: &service.RoleService{}},
 		&inject.Object{Value: &myjwt},
 		&inject.Object{Value: &repository.BaseRepository{}},
 	)
