@@ -1,8 +1,9 @@
 package service
 
 import (
-	"fmt"
-
+	model "github.com/bingjian-zhu/gin-vue-admin/models"
+	"github.com/bingjian-zhu/gin-vue-admin/page/emun"
+	"github.com/bingjian-zhu/gin-vue-admin/page/models"
 	"github.com/bingjian-zhu/gin-vue-admin/repository"
 )
 
@@ -13,7 +14,6 @@ type UserService struct {
 
 //CheckUser 身份验证
 func (a *UserService) CheckUser(username string, password string) bool {
-	fmt.Println("33333333333333")
 	return a.Repository.CheckUser(username, password)
 }
 
@@ -25,4 +25,46 @@ func (a *UserService) GetUserAvatar(username string) string {
 //GetRoles 获取用户角色
 func (a *UserService) GetRoles(username string) []string {
 	return a.Repository.GetRoles(username)
+}
+
+//GetUsers 获取用户信息
+func (a *UserService) GetUsers(page, pagesize int, maps interface{}) map[string]interface{} {
+	res := make(map[string]interface{}, 2)
+	var total uint64
+	users := a.Repository.GetUsers(page, pagesize, &total, maps)
+	var pageUsers []models.Users
+	var pageUser models.Users
+	for _, user := range *users {
+		pageUser.ID = user.ID
+		pageUser.Name = user.Username
+		pageUser.Password = user.Password
+		pageUser.Avatar = user.Avatar
+		pageUser.State = emun.GetStatus(user.State)
+		pageUser.Deteled = emun.GetDeleted(user.Deleted)
+		pageUser.CreatedOn = user.CreatedOn.Format("2006-01-02 15:04:05")
+		pageUsers = append(pageUsers, pageUser)
+	}
+	res["list"] = &pageUsers
+	res["total"] = total
+	return res
+}
+
+//AddUser 新建用户
+func (a *UserService) AddUser(user *model.User) bool {
+	return a.Repository.AddUser(user)
+}
+
+//ExistUserByName 判断用户名是否已存在
+func (a *UserService) ExistUserByName(username string) bool {
+	return a.Repository.ExistUserByName(username)
+}
+
+//UpdateUser 更新用户
+func (a *UserService) UpdateUser(user *model.User) bool {
+	return a.Repository.UpdateUser(user)
+}
+
+//DeleteUser 删除用户
+func (a *UserService) DeleteUser(id int) bool {
+	return a.Repository.DeleteUser(id)
 }

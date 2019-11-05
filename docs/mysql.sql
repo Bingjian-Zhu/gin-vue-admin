@@ -50,7 +50,7 @@ CREATE TABLE `go_user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL DEFAULT '' COMMENT '账号',
   `password` varchar(50) DEFAULT '' COMMENT '密码',
-  `avatar` varchar(255) DEFAULT '' COMMENT '头像地址',
+  `avatar` varchar(255) DEFAULT 'https://zbj-bucket1.oss-cn-shenzhen.aliyuncs.com/avatar.JPG' COMMENT '头像地址',
   `user_type` tinyint(3) unsigned NOT NULL DEFAULT '2' COMMENT '状态 1管理员、2为普通用户',
   `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态 0未进行逻辑删除、1为逻辑删除',
   `state` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态 0为禁用、1为启用',

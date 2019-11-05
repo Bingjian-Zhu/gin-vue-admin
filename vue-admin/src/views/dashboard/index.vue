@@ -8,7 +8,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  name: '首页',
+  name: 'Home',
   computed: {
     ...mapGetters([
       'name'

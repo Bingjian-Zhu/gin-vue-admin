@@ -9,7 +9,7 @@ type IArticleService interface {
 	// //GetArticle 根据id获取Article
 	// GetArticle(id int) models.Article
 	//GetArticles 分页返回文章
-	GetArticles(page int, maps map[string]interface{}) *[]models.Article
+	GetArticles(page, pagesize int, maps map[string]interface{}) *[]models.Article
 	// //AddArticle 新增Article
 	// AddArticle(article models.Article) bool
 	// //ExistArticleByID 根据ID判断Article是否存在

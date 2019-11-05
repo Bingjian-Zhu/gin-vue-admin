@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"fmt"
-
 	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
 	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
@@ -34,7 +32,7 @@ func (a *UserRepository) GetUserAvatar(username string) string {
 	sel := "avatar"
 	err := a.Base.First(&where, &user, sel)
 	if err != nil {
-		fmt.Println(err)
+		a.Log.Error(err)
 		return ""
 	}
 	return user.Avatar
@@ -48,7 +46,7 @@ func (a *UserRepository) GetRoles(username string) []string {
 	sel := "id"
 	err := a.Base.First(&where, &user, sel)
 	if err != nil {
-		fmt.Println(err)
+		a.Log.Error(err)
 		return roles
 	}
 
@@ -58,4 +56,66 @@ func (a *UserRepository) GetRoles(username string) []string {
 		roles = append(roles, role.Value)
 	}
 	return roles
+}
+
+//GetUsers 获取用户信息
+func (a *UserRepository) GetUsers(PageNum int, PageSize int, total *uint64, maps interface{}) *[]models.User {
+	var users []models.User
+	err := a.Base.GetPages(&models.User{}, &users, PageNum, PageSize, total, maps)
+	if err != nil {
+		a.Log.Errorf("获取用户信息失败", err)
+	}
+	return &users
+}
+
+//AddUser 新建用户
+func (a *UserRepository) AddUser(user *models.User) bool {
+	err := a.Base.Create(user)
+	if err != nil {
+		a.Log.Errorf("新建用户失败", err)
+		return false
+	}
+	return true
+}
+
+//ExistUserByName 判断用户名是否已存在
+func (a *UserRepository) ExistUserByName(username string) bool {
+	var user models.User
+	where := models.User{Username: username}
+	sel := "id"
+	err := a.Base.First(&where, &user, sel)
+	if err != nil {
+		a.Log.Error(err)
+		return false
+	}
+	return true
+}
+
+//UpdateUser 更新用户
+func (a *UserRepository) UpdateUser(modUser *models.User) bool {
+	var user models.User
+	err := a.Base.FirstByID(&user, modUser.ID)
+	if err != nil {
+		a.Log.Error(err)
+	}
+	user.Username = modUser.Username
+	user.Password = modUser.Password
+	user.ModifiedBy = modUser.ModifiedBy
+	modErr := a.Base.Save(&user)
+	if modErr != nil {
+		a.Log.Errorf("更新用户失败", modErr)
+		return false
+	}
+	return true
+}
+
+//DeleteUser 更新用户
+func (a *UserRepository) DeleteUser(id int) bool {
+	var user models.User
+	err := a.Base.DeleteByID(&user, id)
+	if err != nil {
+		a.Log.Errorf("删除用户失败", err)
+		return false
+	}
+	return true
 }

@@ -39,19 +39,12 @@ func (b *BaseRepository) DeleteByWhere(model, where interface{}) (count int64, e
 }
 
 // DeleteByID 根据id删除实体
-func (b *BaseRepository) DeleteByID(model interface{}, id uint64) (count int64, err error) {
-	db := b.Source.DB().Where("id=?", id).Delete(model)
-	err = db.Error
-	if err != nil {
-		b.Log.Errorf("删除实体出错", err)
-		return
-	}
-	count = db.RowsAffected
-	return
+func (b *BaseRepository) DeleteByID(model interface{}, id int) error {
+	return b.Source.DB().Where("id=?", id).Delete(model).Error
 }
 
 // DeleteByIDS 根据多个id删除多个实体
-func (b *BaseRepository) DeleteByIDS(model interface{}, ids []uint64) (count int64, err error) {
+func (b *BaseRepository) DeleteByIDS(model interface{}, ids []int) (count int64, err error) {
 	db := b.Source.DB().Where("id in (?)", ids).Delete(model)
 	err = db.Error
 	if err != nil {
@@ -73,6 +66,11 @@ func (b *BaseRepository) First(where interface{}, out interface{}, selects ...st
 	return db.First(out).Error
 }
 
+// FirstByID 根据条件获取一个实体
+func (b *BaseRepository) FirstByID(out interface{}, id int) error {
+	return b.Source.DB().First(out, id).Error
+}
+
 // Find 根据条件返回数据
 func (b *BaseRepository) Find(where interface{}, out interface{}, sel string, orders ...string) error {
 	db := b.Source.DB().Where(where)
@@ -87,8 +85,8 @@ func (b *BaseRepository) Find(where interface{}, out interface{}, sel string, or
 	return db.Find(out).Error
 }
 
-// GetPage 分页返回数据
-func (b *BaseRepository) GetPage(model interface{}, out interface{}, pageIndex, pageSize int, totalCount *uint64, maps map[string]interface{}, orders ...string) error {
+// GetPages 分页返回数据
+func (b *BaseRepository) GetPages(model interface{}, out interface{}, pageIndex, pageSize int, totalCount *uint64, maps interface{}, orders ...string) error {
 	db := b.Source.DB().Model(model).Where(model)
 	db = db.Where(maps)
 	if len(orders) > 0 {

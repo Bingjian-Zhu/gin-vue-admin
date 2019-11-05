@@ -67,7 +67,8 @@ func (a *Article) GetArticles(c *gin.Context) {
 	var viewArticle pageModels.Article
 	if !valid.HasErrors() {
 		code = codes.SUCCESS
-		articles := a.Service.GetArticles(GetPage(c), maps)
+		page, pagesize := GetPage(c)
+		articles := a.Service.GetArticles(page, pagesize, maps)
 		for _, article := range *articles {
 			viewArticle.Id = article.ID
 			viewArticle.Author = article.CreatedBy

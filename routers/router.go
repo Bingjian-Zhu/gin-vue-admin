@@ -47,7 +47,7 @@ func Configure(r *gin.Engine) {
 		&inject.Object{Value: &service.ArticleService{}},
 		&inject.Object{Value: &user},
 		&inject.Object{Value: &repository.UserRepository{}},
-		//&inject.Object{Value: &service.UserService{}},
+		&inject.Object{Value: &service.UserService{}},
 		&inject.Object{Value: &repository.RoleRepository{}},
 		//&inject.Object{Value: &service.RoleService{}},
 		&inject.Object{Value: &myjwt},
@@ -86,7 +86,10 @@ func Configure(r *gin.Engine) {
 	{
 		//vue获取table信息
 		apiv1.GET("/table/list", article.GetArticles)
-
+		apiv1.GET("/user/list", user.GetUsers)
+		apiv1.POST("/user", user.AddUser)
+		apiv1.PUT("/user", user.UpdateUser)
+		apiv1.DELETE("/user/:id", user.DeleteUser)
 		// apiv1.GET("/articles", article.GetArticles)
 		// apiv1.GET("/articles/:id", article.GetArticle)
 		// apiv1.POST("/articles", article.AddArticle)

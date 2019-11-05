@@ -17,7 +17,7 @@ type ArticleRepository struct {
 func (a *ArticleRepository) GetArticles(PageNum int, PageSize int, maps map[string]interface{}) *[]models.Article {
 	var articles []models.Article
 	var total uint64
-	err := a.Base.GetPage(&models.Article{}, &articles, PageNum, PageSize, &total, maps)
+	err := a.Base.GetPages(&models.Article{}, &articles, PageNum, PageSize, &total, maps)
 	if err != nil {
 		fmt.Println(err)
 	}

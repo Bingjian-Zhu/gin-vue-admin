@@ -1,10 +1,15 @@
 package controller
 
 import (
+	"fmt"
+	"log"
 	"net/http"
+	"strconv"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
+	"github.com/astaxie/beego/validation"
 	"github.com/bingjian-zhu/gin-vue-admin/common/codes"
+	model "github.com/bingjian-zhu/gin-vue-admin/models"
 	"github.com/bingjian-zhu/gin-vue-admin/page/models"
 	"github.com/bingjian-zhu/gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
@@ -36,4 +41,88 @@ func (a *User) GetUserInfo(c *gin.Context) {
 //Logout 退出登录
 func (a *User) Logout(c *gin.Context) {
 	RespOk(c, http.StatusOK, codes.SUCCESS)
+}
+
+//GetUsers 获取用户信息
+func (a *User) GetUsers(c *gin.Context) {
+	var maps string
+	code := codes.SUCCESS
+	name := c.Query("name")
+	if name != "" {
+		maps = "username LIKE '%" + name + "%'"
+	}
+	fmt.Println(maps)
+	page, pagesize := GetPage(c)
+	data := a.Service.GetUsers(page, pagesize, maps)
+	RespData(c, http.StatusOK, code, &data)
+}
+
+//AddUser 新建用户
+func (a *User) AddUser(c *gin.Context) {
+	user := model.User{}
+	code := codes.InvalidParams
+	err := c.Bind(&user)
+	if err == nil {
+		valid := validation.Validation{}
+		valid.Required(user.Username, "username").Message("用户名不能为空")
+		valid.Required(user.Password, "password").Message("密码不能为空")
+		if !valid.HasErrors() {
+			roles := jwt.ExtractClaims(c)
+			createdBy := roles["userName"].(string)
+			user.CreatedBy = createdBy
+			user.State = 1
+			user.Avatar = "https://zbj-bucket1.oss-cn-shenzhen.aliyuncs.com/avatar.JPG"
+			if !a.Service.ExistUserByName(user.Username) {
+				if a.Service.AddUser(&user) {
+					code = codes.SUCCESS
+				} else {
+					code = codes.ERROR
+				}
+			} else {
+				code = codes.ErrExistUser
+			}
+		} else {
+			for _, err := range valid.Errors {
+				log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+			}
+		}
+	}
+
+	RespOk(c, http.StatusOK, code)
+}
+
+//UpdateUser 修改用户
+func (a *User) UpdateUser(c *gin.Context) {
+	user := model.User{}
+	code := codes.InvalidParams
+	err := c.Bind(&user)
+	if err == nil {
+		valid := validation.Validation{}
+		valid.Required(user.Username, "username").Message("用户名不能为空")
+		valid.Required(user.Password, "password").Message("密码不能为空")
+		if !valid.HasErrors() {
+			roles := jwt.ExtractClaims(c)
+			modifiedBy := roles["userName"].(string)
+			user.ModifiedBy = modifiedBy
+			if a.Service.UpdateUser(&user) {
+				code = codes.SUCCESS
+			} else {
+				code = codes.ERROR
+			}
+		} else {
+			for _, err := range valid.Errors {
+				log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+			}
+		}
+	}
+	RespOk(c, http.StatusOK, code)
+}
+
+//DeleteUser 删除用户
+func (a *User) DeleteUser(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	fmt.Println(id)
+	code := codes.SUCCESS
+	a.Service.DeleteUser(id)
+	RespOk(c, http.StatusOK, code)
 }

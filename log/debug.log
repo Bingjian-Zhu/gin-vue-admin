@@ -1,0 +1,10 @@
+{"level":"error","ts":"2019-11-05T15:23:50.165+0800","caller":"repository/BaseRepository.go:101","msg":"查询总数出错%!(EXTRA *mysql.MySQLError=Error 1054: Unknown column 'go_user.username LIKE' in 'where clause')"}
+{"level":"error","ts":"2019-11-05T15:26:23.605+0800","caller":"repository/BaseRepository.go:101","msg":"查询总数出错%!(EXTRA *mysql.MySQLError=Error 1054: Unknown column 'go_user.username LIKE ?' in 'where clause')"}
+{"level":"error","ts":"2019-11-05T15:29:15.387+0800","caller":"repository/BaseRepository.go:101","msg":"查询总数出错%!(EXTRA *mysql.MySQLError=Error 1054: Unknown column 'go_user.username LIKE %admin%' in 'where clause')"}
+{"level":"error","ts":"2019-11-05T15:30:46.539+0800","caller":"repository/BaseRepository.go:101","msg":"查询总数出错%!(EXTRA *mysql.MySQLError=Error 1054: Unknown column 'go_user.' in 'where clause')"}
+{"level":"error","ts":"2019-11-05T15:42:04.791+0800","caller":"repository/BaseRepository.go:101","msg":"查询总数出错%!(EXTRA *mysql.MySQLError=Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%te%)' at line 1)"}
+{"level":"error","ts":"2019-11-05T18:58:17.174+0800","caller":"repository/UserRepository.go:88","msg":"record not found"}
+{"level":"error","ts":"2019-11-05T19:07:39.427+0800","caller":"repository/UserRepository.go:88","msg":"record not found"}
+{"level":"error","ts":"2019-11-05T19:14:44.318+0800","caller":"repository/UserRepository.go:88","msg":"record not found"}
+{"level":"error","ts":"2019-11-05T19:17:41.479+0800","caller":"repository/UserRepository.go:88","msg":"record not found"}
+{"level":"error","ts":"2019-11-05T21:05:34.335+0800","caller":"repository/UserRepository.go:88","msg":"record not found"}

@@ -13,6 +13,7 @@ var MsgFlags = map[int]string{
 	ErrAuthToken:             "Token生成失败",
 	ErrAuth:                  "Token错误",
 	PageNotFound:             "Page not found",
+	ErrExistUser:             "用户名已存在",
 }
 
 //GetMsg 获取错误信息
