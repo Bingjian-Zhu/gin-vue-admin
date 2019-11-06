@@ -9,8 +9,8 @@ import (
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/astaxie/beego/validation"
 	"github.com/bingjian-zhu/gin-vue-admin/common/codes"
-	model "github.com/bingjian-zhu/gin-vue-admin/models"
-	"github.com/bingjian-zhu/gin-vue-admin/page/models"
+	"github.com/bingjian-zhu/gin-vue-admin/models"
+	"github.com/bingjian-zhu/gin-vue-admin/page"
 	"github.com/bingjian-zhu/gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
@@ -34,7 +34,7 @@ func (a *User) GetUserInfo(c *gin.Context) {
 	avatar := a.Service.GetUserAvatar(userName)
 	code := codes.SUCCESS
 	userRoles := a.Service.GetRoles(userName)
-	data := models.User{Roles: userRoles, Introduction: "", Avatar: avatar, Name: userName}
+	data := page.User{Roles: userRoles, Introduction: "", Avatar: avatar, Name: userName}
 	RespData(c, http.StatusOK, code, &data)
 }
 
@@ -59,7 +59,7 @@ func (a *User) GetUsers(c *gin.Context) {
 
 //AddUser 新建用户
 func (a *User) AddUser(c *gin.Context) {
-	user := model.User{}
+	user := models.User{}
 	code := codes.InvalidParams
 	err := c.Bind(&user)
 	if err == nil {
@@ -93,7 +93,7 @@ func (a *User) AddUser(c *gin.Context) {
 
 //UpdateUser 修改用户
 func (a *User) UpdateUser(c *gin.Context) {
-	user := model.User{}
+	user := models.User{}
 	code := codes.InvalidParams
 	err := c.Bind(&user)
 	if err == nil {

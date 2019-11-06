@@ -1,4 +1,4 @@
-package models
+package page
 
 type Article struct {
 	Id          int

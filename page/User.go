@@ -1,4 +1,4 @@
-package models
+package page
 
 //User 用户登录信息结构体
 type User struct {

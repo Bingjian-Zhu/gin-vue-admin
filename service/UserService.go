@@ -1,9 +1,9 @@
 package service
 
 import (
-	model "github.com/bingjian-zhu/gin-vue-admin/models"
+	"github.com/bingjian-zhu/gin-vue-admin/models"
+	pageModel "github.com/bingjian-zhu/gin-vue-admin/page"
 	"github.com/bingjian-zhu/gin-vue-admin/page/emun"
-	"github.com/bingjian-zhu/gin-vue-admin/page/models"
 	"github.com/bingjian-zhu/gin-vue-admin/repository"
 )
 
@@ -32,8 +32,8 @@ func (a *UserService) GetUsers(page, pagesize int, maps interface{}) map[string]
 	res := make(map[string]interface{}, 2)
 	var total uint64
 	users := a.Repository.GetUsers(page, pagesize, &total, maps)
-	var pageUsers []models.Users
-	var pageUser models.Users
+	var pageUsers []pageModel.Users
+	var pageUser pageModel.Users
 	for _, user := range *users {
 		pageUser.ID = user.ID
 		pageUser.Name = user.Username
@@ -50,7 +50,7 @@ func (a *UserService) GetUsers(page, pagesize int, maps interface{}) map[string]
 }
 
 //AddUser 新建用户
-func (a *UserService) AddUser(user *model.User) bool {
+func (a *UserService) AddUser(user *models.User) bool {
 	return a.Repository.AddUser(user)
 }
 
@@ -60,7 +60,7 @@ func (a *UserService) ExistUserByName(username string) bool {
 }
 
 //UpdateUser 更新用户
-func (a *UserService) UpdateUser(user *model.User) bool {
+func (a *UserService) UpdateUser(user *models.User) bool {
 	return a.Repository.UpdateUser(user)
 }
 

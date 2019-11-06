@@ -10,7 +10,7 @@ import (
 
 	"github.com/bingjian-zhu/gin-vue-admin/common/codes"
 	"github.com/bingjian-zhu/gin-vue-admin/page/emun"
-	pageModels "github.com/bingjian-zhu/gin-vue-admin/page/models"
+	"github.com/bingjian-zhu/gin-vue-admin/page"
 	"github.com/bingjian-zhu/gin-vue-admin/service"
 )
 
@@ -63,8 +63,8 @@ func (a *Article) GetArticles(c *gin.Context) {
 		valid.Min(tagID, 1, "tag_id").Message("标签ID必须大于0")
 	}
 	code := codes.InvalidParams
-	var viewArticles []pageModels.Article
-	var viewArticle pageModels.Article
+	var viewArticles []page.Article
+	var viewArticle page.Article
 	if !valid.HasErrors() {
 		code = codes.SUCCESS
 		page, pagesize := GetPage(c)
