@@ -8,3 +8,33 @@
 {"level":"error","ts":"2019-11-05T19:14:44.318+0800","caller":"repository/UserRepository.go:88","msg":"record not found"}
 {"level":"error","ts":"2019-11-05T19:17:41.479+0800","caller":"repository/UserRepository.go:88","msg":"record not found"}
 {"level":"error","ts":"2019-11-05T21:05:34.335+0800","caller":"repository/UserRepository.go:88","msg":"record not found"}
+{"level":"error","ts":"2020-03-19T09:06:51.781+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T09:31:01.318+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T09:31:15.228+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T10:06:01.125+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T10:06:29.358+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T10:44:33.288+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T10:45:00.862+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:08:31.372+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:10:30.853+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:10:56.647+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:11:10.733+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:11:23.858+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:12:04.309+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:14:07.344+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:15:29.170+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:17:46.565+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:19:20.016+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:20:32.508+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:24:32.783+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:25:48.821+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:26:07.517+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:28:19.631+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:31:09.779+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:32:02.981+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:34:14.863+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:36:41.235+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:36:57.001+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:37:00.900+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:42:18.185+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
+{"level":"error","ts":"2020-03-19T11:42:33.912+0800","caller":"repository/UserRepository.go:88","msg":"record not found"}

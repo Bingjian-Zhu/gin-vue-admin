@@ -109,10 +109,15 @@ func (a *UserRepository) UpdateUser(modUser *models.User) bool {
 	return true
 }
 
-//DeleteUser 更新用户
+//DeleteUser 删除用户
 func (a *UserRepository) DeleteUser(id int) bool {
 	var user models.User
-	err := a.Base.DeleteByID(&user, id)
+	err := a.Base.FirstByID(&user, id)
+	if err != nil || user.Username == "admin" {
+		a.Log.Errorf("删除用户失败:不能删除admin账号")
+		return false
+	}
+	err = a.Base.DeleteByID(&user, id)
 	if err != nil {
 		a.Log.Errorf("删除用户失败", err)
 		return false

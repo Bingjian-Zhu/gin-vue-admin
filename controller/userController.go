@@ -121,8 +121,13 @@ func (a *User) UpdateUser(c *gin.Context) {
 //DeleteUser 删除用户
 func (a *User) DeleteUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	fmt.Println(id)
 	code := codes.SUCCESS
-	a.Service.DeleteUser(id)
-	RespOk(c, http.StatusOK, code)
+	// a.Service.DeleteUser(id)
+	// RespOk(c, http.StatusOK, code)
+	if !a.Service.DeleteUser(id) {
+		code = codes.ERROR
+		RespFail(c, http.StatusOK, code, "不允许删除admin账号!")
+	} else {
+		RespOk(c, http.StatusOK, code)
+	}
 }
