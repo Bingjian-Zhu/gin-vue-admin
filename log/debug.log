@@ -38,3 +38,4 @@
 {"level":"error","ts":"2020-03-19T11:37:00.900+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
 {"level":"error","ts":"2020-03-19T11:42:18.185+0800","caller":"repository/UserRepository.go:117","msg":"删除用户失败:不能删除admin账号"}
 {"level":"error","ts":"2020-03-19T11:42:33.912+0800","caller":"repository/UserRepository.go:88","msg":"record not found"}
+{"level":"error","ts":"2020-03-19T14:57:55.512+0800","caller":"repository/UserRepository.go:88","msg":"record not found"}

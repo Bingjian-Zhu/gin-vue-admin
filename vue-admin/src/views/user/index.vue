@@ -41,7 +41,7 @@
       </el-table-column>
       <el-table-column label="头像" width="180" align="center">
         <template slot-scope="scope">
-          <img :src="scope.row.avatar" style="width: 30px; height: 30px" />
+          <img :src="scope.row.avatar" style="width: 30px; height: 30px">
         </template>
       </el-table-column>
       <el-table-column
@@ -58,7 +58,7 @@
       </el-table-column>
       <el-table-column prop="date" label="创建日期" sortable width="220" align="center">
         <template slot-scope="scope">
-          <i class="el-icon-time"></i>
+          <i class="el-icon-time" />
           <span style="margin-left: 10px">{{ scope.row.created_on }}</span>
         </template>
       </el-table-column>
@@ -103,18 +103,18 @@
 </template>
 
 <script>
-import { getList, createUser, updateUser,deleteUser } from "@/api/user";
-import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
+import { getList, createUser, updateUser, deleteUser } from '@/api/user'
+import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
-  name: "ComplexTable",
+  name: 'ComplexTable',
   components: { Pagination },
   filters: {
     statusFilter(Status) {
       const statusMap = {
-        正常: "success",
-        禁用: "danger"
-      };
-      return statusMap[Status];
+        正常: 'success',
+        禁用: 'danger'
+      }
+      return statusMap[Status]
     }
   },
   data() {
@@ -128,113 +128,122 @@ export default {
         name: undefined
       },
       dialogFormVisible: false,
-      dialogStatus: "",
+      dialogStatus: '',
       textMap: {
-        update: "编辑用户",
-        create: "新建用户"
+        update: '编辑用户',
+        create: '新建用户'
       },
       rules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
+          { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       },
       temp: {
         id: undefined,
-        username: "",
-        password: ""
+        username: '',
+        password: ''
       }
-    };
+    }
   },
   created() {
-    this.fetchData();
+    this.fetchData()
   },
   methods: {
     handleEdit(index, row) {
-      this.temp.id = row.id;
-      this.temp.username = row.username;
-      this.temp.password = row.password;
-      this.dialogStatus = "update";
-      this.dialogFormVisible = true;
+      this.temp.id = row.id
+      this.temp.username = row.username
+      this.temp.password = row.password
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
       this.$nextTick(() => {
-        this.$refs["dataForm"].clearValidate();
-      });
+        this.$refs['dataForm'].clearValidate()
+      })
     },
     handleDelete(index, row) {
-        deleteUser(row.id).then(() => {
-            this.fetchData();
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: "Success",
-              message: "删除用户成功!",
-              type: "success",
-              duration: 2000
-            });
-          });
+      deleteUser(row.id).then(response => {
+        this.fetchData()
+        this.dialogFormVisible = false
+        if (response.msg === 'fail') {
+          this.$notify({
+            title: 'Fail',
+            message: response.detail,
+            type: 'error',
+            duration: 2000
+          })
+        } else {
+          this.$notify({
+            title: 'Success',
+            message: '删除用户成功!',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      })
     },
     fetchData() {
-      this.listLoading = true;
+      this.listLoading = true
       getList(this.listQuery).then(response => {
-        this.list = response.data.list;
-        this.total = response.data.total;
-        this.listLoading = false;
-      });
+        this.list = response.data.list
+        this.total = response.data.total
+        this.listLoading = false
+      })
     },
     handleFilter() {
-      this.listQuery.page = 1;
-      this.fetchData();
+      this.listQuery.page = 1
+      this.fetchData()
     },
     resetTemp() {
       this.temp = {
         id: undefined,
-        username: "",
-        password: ""
-      };
+        username: '',
+        password: ''
+      }
     },
     handleCreate() {
-      this.resetTemp();
-      this.dialogStatus = "create";
-      this.dialogFormVisible = true;
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
       this.$nextTick(() => {
-        this.$refs["dataForm"].clearValidate();
-      });
+        this.$refs['dataForm'].clearValidate()
+      })
     },
     filterTag(value, row) {
-      return row.state === value;
+      return row.state === value
     },
     createData() {
-      this.$refs["dataForm"].validate(valid => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           createUser(this.temp).then(() => {
-            this.fetchData();
-            this.dialogFormVisible = false;
+            this.fetchData()
+            this.dialogFormVisible = false
             this.$notify({
-              title: "Success",
-              message: "新建用户成功!",
-              type: "success",
+              title: 'Success',
+              message: '新建用户成功!',
+              type: 'success',
               duration: 2000
-            });
-          });
+            })
+          })
         }
-      });
+      })
     },
     updateData() {
-      this.$refs["dataForm"].validate(valid => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          const tempData = Object.assign({}, this.temp);
+          const tempData = Object.assign({}, this.temp)
           updateUser(tempData).then(() => {
-            this.fetchData();
-            this.dialogFormVisible = false;
+            this.fetchData()
+            this.dialogFormVisible = false
             this.$notify({
-              title: "Success",
-              message: "更新数据成功",
-              type: "success",
+              title: 'Success',
+              message: '更新数据成功',
+              type: 'success',
               duration: 2000
-            });
-          });
+            })
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
