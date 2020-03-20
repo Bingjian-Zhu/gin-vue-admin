@@ -83,11 +83,11 @@ CREATE TABLE `go_tag` (
 -- ----------------------------
 DROP TABLE IF EXISTS `go_role`;
 CREATE TABLE `go_role` (
-  `role_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
   `user_name` varchar(50) NOT NULL DEFAULT '' COMMENT '账号，冗余设计',
   `value` varchar(50) DEFAULT '' COMMENT 'role值',
-  PRIMARY KEY (`role_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -95,7 +95,7 @@ CREATE TABLE `go_role` (
 -- ----------------------------
 DROP TABLE IF EXISTS `go_menus`;
 CREATE TABLE `go_menus` (
-  `menu_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `menu_name` varchar(50) NOT NULL DEFAULT '' COMMENT '菜单名称',
   `url` varchar(255) DEFAULT '' COMMENT '菜单地址',
   `parent_id` int(10) unsigned NOT NULL COMMENT '上级id',
@@ -107,7 +107,7 @@ CREATE TABLE `go_menus` (
   `created_by` varchar(100) DEFAULT '' COMMENT '创建人',
   `modified_on` datetime  DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   `modified_by` varchar(255) DEFAULT '' COMMENT '修改人',
-  PRIMARY KEY (`menu_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -115,9 +115,10 @@ CREATE TABLE `go_menus` (
 -- ----------------------------
 DROP TABLE IF EXISTS `go_role_menu`;
 CREATE TABLE `go_role_menu` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `role_id` int(10) unsigned NOT NULL COMMENT '角色ID',
   `menu_id` int(10) unsigned NOT NULL COMMENT '菜单ID',
-  PRIMARY KEY (`role_id`, `menu_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -134,6 +135,6 @@ INSERT INTO `go_article`(`id`, `tag_id`, `title`, `desc`, `content`, `cover_imag
 INSERT INTO `go_article`(`id`, `tag_id`, `title`, `desc`, `content`, `cover_image_url`, `created_on`, `created_by`, `modified_on`, `modified_by`, `deleted_on`, `state`) VALUES (2, 1, 'test2', 'test-desc', 'test-content', '', '2019-08-19 21:00:48', 'test-created', '2019-08-19 21:00:48', '', 0, 2);
 INSERT INTO `go_article`(`id`, `tag_id`, `title`, `desc`, `content`, `cover_image_url`, `created_on`, `created_by`, `modified_on`, `modified_by`, `deleted_on`, `state`) VALUES (3, 1, 'test3', 'test-desc', 'test-content', '', '2019-08-19 21:00:49', 'test-created', '2019-08-19 21:00:49', '', 0, 1);
 
-INSERT INTO `go_role`(`role_id`, `user_id`, `user_name`, `value`) VALUES (1, 1, 'admin', 'admin');
-INSERT INTO `go_role`(`role_id`, `user_id`, `user_name`, `value`) VALUES (2, 1, 'admin', 'test');
-INSERT INTO `go_role`(`role_id`, `user_id`, `user_name`, `value`) VALUES (3, 2, 'test', 'test');
+INSERT INTO `go_role`(`id`, `user_id`, `user_name`, `value`) VALUES (1, 1, 'admin', 'admin');
+INSERT INTO `go_role`(`id`, `user_id`, `user_name`, `value`) VALUES (2, 1, 'admin', 'test');
+INSERT INTO `go_role`(`id`, `user_id`, `user_name`, `value`) VALUES (3, 2, 'test', 'test');

@@ -34,12 +34,12 @@
           <span>{{ scope.row.username }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="密码" width="180" align="center">
+      <el-table-column label="密码" width="150" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.password }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="头像" width="180" align="center">
+      <el-table-column label="头像" width="110" align="center">
         <template slot-scope="scope">
           <img :src="scope.row.avatar" style="width: 30px; height: 30px">
         </template>
@@ -54,6 +54,18 @@
       >
         <template slot-scope="scope">
           <el-tag :type="scope.row.state | statusFilter">{{ scope.row.state }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="user_type"
+        label="用户类型"
+        width="110"
+        align="center"
+        :filters="[{ text: '管理员', value: '管理员' }, { text: '测试用户', value: '测试用户' }]"
+        :filter-method="filterType"
+      >
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.user_type | userTypeFilter">{{ scope.row.user_type }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="date" label="创建日期" sortable width="220" align="center">
@@ -93,6 +105,12 @@
         <el-form-item label="密码" prop="password">
           <el-input v-model="temp.password" />
         </el-form-item>
+        <el-form-item label="权限" prop="user_type">
+          <el-select v-model="temp.user_type" placeholder="请选择权限">
+            <el-option label="管理员" :value="1" />
+            <el-option label="测试用户" :value="2" />
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -115,6 +133,13 @@ export default {
         禁用: 'danger'
       }
       return statusMap[Status]
+    },
+    userTypeFilter(userType) {
+      const statusMap = {
+        管理员: 'success',
+        测试用户: 'primary'
+      }
+      return statusMap[userType]
     }
   },
   data() {
@@ -137,12 +162,14 @@ export default {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        user_type: [{ required: true, message: '请选择权限', trigger: 'change' }]
       },
       temp: {
         id: undefined,
         username: '',
-        password: ''
+        password: '',
+        user_type: undefined
       }
     }
   },
@@ -154,6 +181,7 @@ export default {
       this.temp.id = row.id
       this.temp.username = row.username
       this.temp.password = row.password
+      this.temp.user_type = row.user_type
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -210,6 +238,9 @@ export default {
     },
     filterTag(value, row) {
       return row.state === value
+    },
+    filterType(value, row) {
+      return row.user_type === value
     },
     createData() {
       this.$refs['dataForm'].validate(valid => {

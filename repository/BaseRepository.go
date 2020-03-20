@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
 	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
+	"github.com/jinzhu/gorm"
 )
 
 //BaseRepository 注入IDb,Logger
@@ -108,4 +109,9 @@ func (b *BaseRepository) GetPages(model interface{}, out interface{}, pageIndex,
 // PluckList 查询 model 中的一个列作为切片
 func (b *BaseRepository) PluckList(model, where interface{}, out interface{}, fieldName string) error {
 	return b.Source.DB().Model(model).Where(where).Pluck(fieldName, out).Error
+}
+
+//GetTransaction 获取事务
+func (b *BaseRepository) GetTransaction() *gorm.DB {
+	return b.Source.DB().Begin()
 }

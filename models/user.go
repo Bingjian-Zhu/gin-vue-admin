@@ -12,6 +12,7 @@ type User struct {
 	Username   string `json:"username"`
 	Password   string `json:"password"`
 	Avatar     string `json:"avatar"`
+	UserType   int    `json:"user_type"`
 	Deleted    int    `json:"deteled"`
 	State      int    `json:"state"`
 	CreatedBy  string `json:"created_by"`

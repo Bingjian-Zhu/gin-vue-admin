@@ -39,6 +39,7 @@ func (a *UserService) GetUsers(page, pagesize int, maps interface{}) map[string]
 		pageUser.Name = user.Username
 		pageUser.Password = user.Password
 		pageUser.Avatar = user.Avatar
+		pageUser.UserType = emun.GetUserType(user.UserType)
 		pageUser.State = emun.GetStatus(user.State)
 		pageUser.Deteled = emun.GetDeleted(user.Deleted)
 		pageUser.CreatedOn = user.CreatedOn.Format("2006-01-02 15:04:05")
