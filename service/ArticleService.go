@@ -16,15 +16,15 @@ type ArticleService struct {
 // 	return a.Repository.GetArticle(id)
 // }
 
-//GetArticles 分页返回文章
-func (a *ArticleService) GetArticles(page int, maps map[string]interface{}) *[]models.Article {
-	return a.Repository.GetArticles(page, setting.Config.APP.Pagesize, maps)
+//GetTables 分页返回文章
+func (a *ArticleService) GetTables(page int, maps map[string]interface{}) *[]models.Article {
+	return a.Repository.GetTables(page, setting.Config.APP.Pagesize, maps)
 }
 
-// //AddArticle 新增Article
-// func (a *ArticleService) AddArticle(article models.Article) bool {
-// 	return a.Repository.AddArticle(article)
-// }
+//AddArticle 新增Article
+func (a *ArticleService) AddArticle(article *models.Article) bool {
+	return a.Repository.AddArticle(article)
+}
 
 // //ExistArticleByID 根据ID判断Article是否存在
 // func (a *ArticleService) ExistArticleByID(id int) bool {
@@ -40,3 +40,8 @@ func (a *ArticleService) GetArticles(page int, maps map[string]interface{}) *[]m
 // func (a *ArticleService) DeleteArticle(id int) bool {
 // 	return a.Repository.DeleteArticle(id)
 // }
+
+//GetArticles 获取文章信息
+func (a *ArticleService) GetArticles(PageNum int, PageSize int, total *uint64, maps interface{}) *[]models.Article {
+	return a.Repository.GetArticles(PageNum, PageSize, total, maps)
+}

@@ -85,14 +85,14 @@ func Configure(r *gin.Engine) {
 	apiv1.Use(adminMiddleware.MiddlewareFunc())
 	{
 		//vue获取table信息
-		apiv1.GET("/table/list", article.GetArticles)
+		apiv1.GET("/table/list", article.GetTables)
 		apiv1.GET("/user/list", user.GetUsers)
 		apiv1.POST("/user", user.AddUser)
 		apiv1.PUT("/user", user.UpdateUser)
 		apiv1.DELETE("/user/:id", user.DeleteUser)
-		// apiv1.GET("/articles", article.GetArticles)
+		apiv1.GET("/article/list", article.GetArticles)
 		// apiv1.GET("/articles/:id", article.GetArticle)
-		// apiv1.POST("/articles", article.AddArticle)
+		apiv1.POST("/article", article.AddArticle)
 		// apiv1.PUT("/articles/:id", article.EditArticle)
 		// apiv1.DELETE("/articles/:id", article.DeleteArticle)
 	}

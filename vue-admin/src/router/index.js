@@ -99,12 +99,31 @@ export const constantRoutes = [
   {
     path: '/form',
     component: Layout,
+    redirect: '/form/list',
+    name: '文章管理',
+    meta: {
+      title: '文章管理',
+      icon: 'form'
+    },
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        path: 'create',
+        component: () => import('@/views/form/create'),
+        name: 'CreateArticle',
+        meta: { title: '新建文章', icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/form/edit'),
+        name: 'EditArticle',
+        meta: { title: '编辑文章', noCache: true, activeMenu: '/form/list' },
+        hidden: true
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/form/list'),
+        name: 'ArticleList',
+        meta: { title: '文章列表', icon: 'list' }
       }
     ]
   },

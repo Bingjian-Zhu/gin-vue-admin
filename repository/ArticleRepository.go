@@ -4,17 +4,19 @@ import (
 	"fmt"
 
 	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
+	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
 )
 
 //ArticleRepository 注入IDb
 type ArticleRepository struct {
 	Source datasource.IDb `inject:""`
+	Log    logger.ILogger `inject:""`
 	Base   BaseRepository `inject:"inline"`
 }
 
-//GetArticles 分页返回Articles
-func (a *ArticleRepository) GetArticles(PageNum int, PageSize int, maps map[string]interface{}) *[]models.Article {
+//GetTables 分页返回Articles
+func (a *ArticleRepository) GetTables(PageNum int, PageSize int, maps map[string]interface{}) *[]models.Article {
 	var articles []models.Article
 	var total uint64
 	err := a.Base.GetPages(&models.Article{}, &articles, PageNum, PageSize, &total, maps)
@@ -33,7 +35,7 @@ func (a *ArticleRepository) GetArticle(id int) (article models.Article) {
 }
 
 //AddArticle 新增Article
-func (a *ArticleRepository) AddArticle(article models.Article) bool {
+func (a *ArticleRepository) AddArticle(article *models.Article) bool {
 	a.Source.DB().Create(article)
 	return true
 }
@@ -64,4 +66,14 @@ func (a *ArticleRepository) ExistArticleByID(id int) bool {
 func (a *ArticleRepository) GetArticleTotal(maps map[string]interface{}) (count int) {
 	a.Source.DB().Model(&models.Article{}).Where(maps).Count(&count)
 	return
+}
+
+//GetArticles 获取文章
+func (a *ArticleRepository) GetArticles(PageNum int, PageSize int, total *uint64, maps interface{}) *[]models.Article {
+	var articles []models.Article
+	err := a.Base.GetPages(&models.Article{}, &articles, PageNum, PageSize, total, maps)
+	if err != nil {
+		a.Log.Errorf("获取文章信息失败", err)
+	}
+	return &articles
 }

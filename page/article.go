@@ -1,7 +1,8 @@
 package page
 
+//Article 文章信息
 type Article struct {
-	Id          int
+	ID          int
 	Title       string
 	Status      string
 	Author      string
