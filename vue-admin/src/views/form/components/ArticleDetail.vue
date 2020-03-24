@@ -24,7 +24,7 @@
               <el-row>
                 <el-col :span="8">
                   <el-form-item label-width="60px" label="作者:" class="postInfo-container-item">
-                    <el-input v-model="postForm.created_by"></el-input>
+                    <el-input v-model="postForm.created_by" />
                   </el-form-item>
                 </el-col>
 
@@ -59,7 +59,7 @@
         <el-form-item prop="content" style="margin-bottom: 30px;">
           <Tinymce ref="editor" v-model="postForm.content" :height="400" />
         </el-form-item>
-<!-- 
+        <!--
         <el-form-item prop="cover_image_url" style="margin-bottom: 30px;">
           <Upload v-model="postForm.cover_image_url" />
         </el-form-item> -->
@@ -72,14 +72,12 @@
 import Tinymce from '@/components/Tinymce'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { validURL } from '@/utils/validate'
 import { fetchArticle, createArticle } from '@/api/article'
-import { searchUser } from '@/api/remote-search'
 
 const defaultForm = {
   state: 0,
   title: '', // 文章题目
-  created_by: '',//文章作者
+  created_by: '', // 文章作者
   content: '', // 文章内容
   desc: '', // 文章摘要
   cover_image_url: '', // 文章图片
@@ -105,21 +103,6 @@ export default {
           type: 'error'
         })
         callback(new Error(rule.field + '为必传项'))
-      } else {
-        callback()
-      }
-    }
-    const validateSourceUri = (rule, value, callback) => {
-      if (value) {
-        if (validURL(value)) {
-          callback()
-        } else {
-          this.$message({
-            message: '外链url填写不正确',
-            type: 'error'
-          })
-          callback(new Error('外链url填写不正确'))
-        }
       } else {
         callback()
       }
@@ -169,41 +152,30 @@ export default {
       fetchArticle(id).then(response => {
         this.postForm = response.data
 
-        // just for test
-        this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.desc += `   Article Id:${this.postForm.id}`
-
-        // set tagsview title
-        this.setTagsViewTitle()
-
         // set page title
         this.setPageTitle()
       }).catch(err => {
         console.log(err)
       })
     },
-    setTagsViewTitle() {
-      const title = 'Edit Article'
-      const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
-      this.$store.dispatch('tagsView/updateVisitedView', route)
-    },
     setPageTitle() {
-      const title = 'Edit Article'
-      document.title = `${title} - ${this.postForm.id}`
+      const title = '编辑文章'
+      document.title = `${title} - ${this.postForm.title}`
     },
     submitForm() {
       this.$refs.postForm.validate(valid => {
         if (valid) {
-         this.postForm.state = 1
-         createArticle(this.postForm).then(response => {
-          this.loading = true
-          this.$notify({
-            title: '成功',
-            message: '发布文章成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.loading = false
+          this.postForm.state = 1
+          createArticle(this.postForm).then(response => {
+            this.loading = true
+            this.$notify({
+              title: '成功',
+              message: '发布文章成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.$router.push({ path: this.redirect || '/form/list' })
+            this.loading = false
           })
         } else {
           console.log('error submit!!')
@@ -212,18 +184,19 @@ export default {
       })
     },
     draftForm() {
-        this.$refs.postForm.validate(valid => {
+      this.$refs.postForm.validate(valid => {
         if (valid) {
-         this.postForm.state = 0
-         createArticle(this.postForm).then(response => {
-          this.loading = true
-          this.$notify({
-            title: '成功',
-            message: '已存为草稿',
-            type: 'success',
-            duration: 2000
-          })
-          this.loading = false
+          this.postForm.state = 0
+          createArticle(this.postForm).then(response => {
+            this.loading = true
+            this.$notify({
+              title: '成功',
+              message: '已存为草稿',
+              type: 'success',
+              duration: 2000
+            })
+            this.$router.push({ path: this.redirect || '/form/list' })
+            this.loading = false
           })
         } else {
           console.log('error submit!!')

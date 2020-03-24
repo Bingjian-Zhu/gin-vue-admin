@@ -21,27 +21,23 @@ type Article struct {
 	//TagService     service.ITagService     `inject:""`
 }
 
-// //GetArticle 获取单个文章
-// func (a *Article) GetArticle(c *gin.Context) {
-// 	id, _ := strconv.Atoi(c.Param("id"))
-// 	valid := validation.Validation{}
-// 	valid.Min(id, 1, "id").Message("ID必须大于0")
-// 	var data models.Article
-// 	code := codes.InvalidParams
-// 	if !valid.HasErrors() {
-// 		if a.Service.ExistArticleByID(id) {
-// 			data = a.Service.GetArticle(id)
-// 			code = codes.SUCCESS
-// 		} else {
-// 			code = codes.ErrNotExistArticle
-// 		}
-// 	} else {
-// 		for _, err := range valid.Errors {
-// 			log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
-// 		}
-// 	}
-// 	res.RespData(c, http.StatusOK, code, &data)
-// }
+//GetArticle 获取单个文章
+func (a *Article) GetArticle(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	valid := validation.Validation{}
+	valid.Min(id, 1, "id").Message("ID必须大于0")
+	var data *models.Article
+	code := codes.InvalidParams
+	if !valid.HasErrors() {
+		data = a.Service.GetArticle(id)
+		code = codes.SUCCESS
+	} else {
+		for _, err := range valid.Errors {
+			log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+		}
+	}
+	RespData(c, http.StatusOK, code, data)
+}
 
 //GetTables 获取多个文章
 func (a *Article) GetTables(c *gin.Context) {
@@ -93,6 +89,7 @@ func (a *Article) AddArticle(c *gin.Context) {
 	code := codes.InvalidParams
 	err := c.Bind(&article)
 	if err == nil {
+		article.ModifiedOn = article.CreatedOn
 		valid := validation.Validation{}
 		valid.Min(article.TagID, 0, "tag_id").Message("标签ID必须不小于0")
 		valid.Required(article.Title, "title").Message("标题不能为空")

@@ -7,7 +7,7 @@ type IArticleRepository interface {
 	//GetTables 分页返回Articles
 	GetTables(PageNum int, PageSize int, maps map[string]interface{}) *[]models.Article
 	//GetArticle 根据id获取Article
-	GetArticle(id int) (article models.Article)
+	GetArticle(id int) *models.Article
 	//AddArticle 新增Article
 	AddArticle(article *models.Article) bool
 	//EditArticle 编辑Article

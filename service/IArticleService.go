@@ -6,8 +6,8 @@ import (
 
 //IArticleService Article接口定义
 type IArticleService interface {
-	// //GetArticle 根据id获取Article
-	// GetArticle(id int) models.Article
+	//GetArticle 根据id获取Article
+	GetArticle(id int) *models.Article
 	//GetTables 分页返回文章
 	GetTables(page, pagesize int, maps map[string]interface{}) *[]models.Article
 	//AddArticle 新增Article

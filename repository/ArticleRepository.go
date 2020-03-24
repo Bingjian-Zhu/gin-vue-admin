@@ -27,16 +27,15 @@ func (a *ArticleRepository) GetTables(PageNum int, PageSize int, maps map[string
 }
 
 //GetArticle 根据id获取Article
-func (a *ArticleRepository) GetArticle(id int) (article models.Article) {
+func (a *ArticleRepository) GetArticle(id int) *models.Article {
+	var article models.Article
 	a.Source.DB().Where("id = ?", id).First(&article)
-	a.Source.DB().Where("id = ?", article.TagID).First(&article.Tag)
-	//db.Model(&article).Related(&article.Tag)
-	return
+	return &article
 }
 
 //AddArticle 新增Article
 func (a *ArticleRepository) AddArticle(article *models.Article) bool {
-	a.Source.DB().Create(article)
+	a.Source.DB().Save(article)
 	return true
 }
 
@@ -71,7 +70,7 @@ func (a *ArticleRepository) GetArticleTotal(maps map[string]interface{}) (count 
 //GetArticles 获取文章
 func (a *ArticleRepository) GetArticles(PageNum int, PageSize int, total *uint64, maps interface{}) *[]models.Article {
 	var articles []models.Article
-	err := a.Base.GetPages(&models.Article{}, &articles, PageNum, PageSize, total, maps)
+	err := a.Base.GetPages(&models.Article{}, &articles, PageNum, PageSize, total, maps, "ID desc")
 	if err != nil {
 		a.Log.Errorf("获取文章信息失败", err)
 	}

@@ -10,9 +10,8 @@ export function fetchList(query) {
 
 export function fetchArticle(id) {
   return request({
-    url: '/article/detail',
-    method: 'get',
-    params: { id }
+    url: '/api/v1/article/detail/' + id,
+    method: 'get'
   })
 }
 

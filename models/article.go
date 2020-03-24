@@ -14,7 +14,7 @@ type Article struct {
 	TagID         int    `json:"tag_id"`
 	Title         string `json:"title"`
 	Desc          string `json:"desc"`
-	Content       string `json:"Content"`
+	Content       string `json:"content"`
 	CoverImageURL string `json:"cover_image_url"`
 	CreatedBy     string `json:"created_by"`
 	ModifiedBy    string `json:"modified_by"`

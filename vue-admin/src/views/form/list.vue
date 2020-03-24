@@ -22,14 +22,14 @@
       <el-table-column width="100px" label="Importance">
         <template slot-scope="scope">
           <!-- <svg-icon v-for="n in +scope.row.tag_id" :key="n" icon-class="star" class="meta-item__icon" /> -->
-          <i v-for="n in +scope.row.tag_id" :key="n" class="el-icon-star-on"></i>
+          <i v-for="n in +scope.row.tag_id" :key="n" class="el-icon-star-on" />
         </template>
       </el-table-column>
 
       <el-table-column class-name="state-col" label="Status" width="110">
         <template slot-scope="{row}">
           <el-tag :type="row.state | statusFilter">
-            {{ row.state == 1?'发布':'草稿'}}
+            {{ row.state == 1?'发布':'草稿' }}
           </el-tag>
         </template>
       </el-table-column>
@@ -74,7 +74,7 @@ export default {
       }
       return statusMap[state]
     },
-     parseTime: parseTime
+    parseTime: parseTime
   },
   data() {
     return {

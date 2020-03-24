@@ -11,10 +11,10 @@ type ArticleService struct {
 	Repository repository.IArticleRepository `inject:""`
 }
 
-// //GetArticle 根据id获取Article
-// func (a *ArticleService) GetArticle(id int) models.Article {
-// 	return a.Repository.GetArticle(id)
-// }
+//GetArticle 根据id获取Article
+func (a *ArticleService) GetArticle(id int) *models.Article {
+	return a.Repository.GetArticle(id)
+}
 
 //GetTables 分页返回文章
 func (a *ArticleService) GetTables(page int, maps map[string]interface{}) *[]models.Article {
