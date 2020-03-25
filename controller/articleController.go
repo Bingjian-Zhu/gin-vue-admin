@@ -41,44 +41,19 @@ func (a *Article) GetArticle(c *gin.Context) {
 
 //GetTables 获取多个文章
 func (a *Article) GetTables(c *gin.Context) {
-	maps := make(map[string]interface{})
-	valid := validation.Validation{}
-
-	var state int = -1
-	if arg := c.Query("state"); arg != "" {
-		state, _ = strconv.Atoi(arg)
-		maps["state"] = state
-
-		valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
-	}
-
-	var tagID int = -1
-	if arg := c.Query("tag_id"); arg != "" {
-		tagID, _ = strconv.Atoi(arg)
-		maps["tag_id"] = tagID
-
-		valid.Min(tagID, 1, "tag_id").Message("标签ID必须大于0")
-	}
-	code := codes.InvalidParams
 	var viewArticles []page.Article
 	var viewArticle page.Article
-	if !valid.HasErrors() {
-		code = codes.SUCCESS
-		page, pagesize := GetPage(c)
-		articles := a.Service.GetTables(page, pagesize, maps)
-		for _, article := range *articles {
-			viewArticle.ID = article.ID
-			viewArticle.Author = article.CreatedBy
-			viewArticle.DisplayTime = article.ModifiedOn.String()
-			viewArticle.Pageviews = 3474
-			viewArticle.Status = emun.GetArticleStatus(article.State)
-			viewArticle.Title = article.Title
-			viewArticles = append(viewArticles, viewArticle)
-		}
-	} else {
-		for _, err := range valid.Errors {
-			log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
-		}
+	code := codes.SUCCESS
+	page, pagesize := GetPage(c)
+	articles := a.Service.GetTables(page, pagesize)
+	for _, article := range *articles {
+		viewArticle.ID = article.ID
+		viewArticle.Author = article.CreatedBy
+		viewArticle.DisplayTime = article.ModifiedOn.String()
+		viewArticle.Pageviews = 3474
+		viewArticle.Status = emun.GetArticleStatus(article.State)
+		viewArticle.Title = article.Title
+		viewArticles = append(viewArticles, viewArticle)
 	}
 	RespData(c, http.StatusOK, code, &viewArticles)
 }

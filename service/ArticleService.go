@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/bingjian-zhu/gin-vue-admin/common/setting"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
 	"github.com/bingjian-zhu/gin-vue-admin/repository"
 )
@@ -17,8 +16,9 @@ func (a *ArticleService) GetArticle(id int) *models.Article {
 }
 
 //GetTables 分页返回文章
-func (a *ArticleService) GetTables(page int, maps map[string]interface{}) *[]models.Article {
-	return a.Repository.GetTables(page, setting.Config.APP.Pagesize, maps)
+func (a *ArticleService) GetTables(page, pagesize int) *[]models.Article {
+	maps := make(map[string]interface{})
+	return a.Repository.GetTables(page, pagesize, maps)
 }
 
 //AddArticle 新增Article

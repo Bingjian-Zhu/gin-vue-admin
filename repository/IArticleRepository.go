@@ -10,14 +10,14 @@ type IArticleRepository interface {
 	GetArticle(id int) *models.Article
 	//AddArticle 新增Article
 	AddArticle(article *models.Article) bool
-	//EditArticle 编辑Article
-	EditArticle(article models.Article) bool
-	//DeleteArticle 删除Article
-	DeleteArticle(id int) bool
-	//ExistArticleByID 根据ID判断Article是否存在
-	ExistArticleByID(id int) bool
-	//GetArticleTotal 获取Article总数
-	GetArticleTotal(maps map[string]interface{}) (count int)
 	//GetArticles 获取文章
 	GetArticles(PageNum int, PageSize int, total *uint64, maps interface{}) *[]models.Article
+	// //EditArticle 编辑Article
+	// EditArticle(article models.Article) bool
+	// //DeleteArticle 删除Article
+	// DeleteArticle(id int) bool
+	// //ExistArticleByID 根据ID判断Article是否存在
+	// ExistArticleByID(id int) bool
+	// //GetArticleTotal 获取Article总数
+	// GetArticleTotal(maps map[string]interface{}) (count int)
 }

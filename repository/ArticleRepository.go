@@ -19,7 +19,7 @@ type ArticleRepository struct {
 func (a *ArticleRepository) GetTables(PageNum int, PageSize int, maps map[string]interface{}) *[]models.Article {
 	var articles []models.Article
 	var total uint64
-	err := a.Base.GetPages(&models.Article{}, &articles, PageNum, PageSize, &total, maps)
+	err := a.Base.GetPages(&models.Article{}, &articles, PageNum, PageSize, &total, "")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -39,34 +39,6 @@ func (a *ArticleRepository) AddArticle(article *models.Article) bool {
 	return true
 }
 
-//EditArticle 编辑Article
-func (a *ArticleRepository) EditArticle(article models.Article) bool {
-	a.Source.DB().Model(&models.Article{}).Where("id = ?", article.ID).Update(article)
-	return true
-}
-
-//DeleteArticle 删除Article
-func (a *ArticleRepository) DeleteArticle(id int) bool {
-	a.Source.DB().Where("id = ?", id).Delete(&models.Article{})
-	return true
-}
-
-//ExistArticleByID 根据ID判断Article是否存在
-func (a *ArticleRepository) ExistArticleByID(id int) bool {
-	var article models.Article
-	a.Source.DB().Select("id").Where("id = ?", id).First(&article)
-	if article.ID > 0 {
-		return true
-	}
-	return false
-}
-
-//GetArticleTotal 获取Article总数
-func (a *ArticleRepository) GetArticleTotal(maps map[string]interface{}) (count int) {
-	a.Source.DB().Model(&models.Article{}).Where(maps).Count(&count)
-	return
-}
-
 //GetArticles 获取文章
 func (a *ArticleRepository) GetArticles(PageNum int, PageSize int, total *uint64, maps interface{}) *[]models.Article {
 	var articles []models.Article
@@ -76,3 +48,31 @@ func (a *ArticleRepository) GetArticles(PageNum int, PageSize int, total *uint64
 	}
 	return &articles
 }
+
+// //EditArticle 编辑Article
+// func (a *ArticleRepository) EditArticle(article models.Article) bool {
+// 	a.Source.DB().Model(&models.Article{}).Where("id = ?", article.ID).Update(article)
+// 	return true
+// }
+
+// //DeleteArticle 删除Article
+// func (a *ArticleRepository) DeleteArticle(id int) bool {
+// 	a.Source.DB().Where("id = ?", id).Delete(&models.Article{})
+// 	return true
+// }
+
+// //ExistArticleByID 根据ID判断Article是否存在
+// func (a *ArticleRepository) ExistArticleByID(id int) bool {
+// 	var article models.Article
+// 	a.Source.DB().Select("id").Where("id = ?", id).First(&article)
+// 	if article.ID > 0 {
+// 		return true
+// 	}
+// 	return false
+// }
+
+// //GetArticleTotal 获取Article总数
+// func (a *ArticleRepository) GetArticleTotal(maps map[string]interface{}) (count int) {
+// 	a.Source.DB().Model(&models.Article{}).Where(maps).Count(&count)
+// 	return
+// }

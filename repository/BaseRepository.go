@@ -87,9 +87,9 @@ func (b *BaseRepository) Find(where interface{}, out interface{}, sel string, or
 }
 
 // GetPages 分页返回数据
-func (b *BaseRepository) GetPages(model interface{}, out interface{}, pageIndex, pageSize int, totalCount *uint64, maps interface{}, orders ...string) error {
+func (b *BaseRepository) GetPages(model interface{}, out interface{}, pageIndex, pageSize int, totalCount *uint64, where interface{}, orders ...string) error {
 	db := b.Source.DB().Model(model).Where(model)
-	db = db.Where(maps)
+	db = db.Where(where)
 	if len(orders) > 0 {
 		for _, order := range orders {
 			db = db.Order(order)

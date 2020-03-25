@@ -4,6 +4,7 @@ import (
 	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
 	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
+	"github.com/jinzhu/gorm"
 )
 
 //UserRepository 注入IDb
@@ -96,6 +97,11 @@ func (a *UserRepository) ExistUserByName(username string) bool {
 	where := models.User{Username: username}
 	sel := "id"
 	err := a.Base.First(&where, &user, sel)
+	//记录不存在错误(RecordNotFound)，返回false
+	if gorm.IsRecordNotFoundError(err) {
+		return false
+	}
+	//其他类型的错误，写下日志，返回false
 	if err != nil {
 		a.Log.Error(err)
 		return false
