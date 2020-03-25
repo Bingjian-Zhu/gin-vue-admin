@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -51,10 +50,9 @@ func (a *User) GetUsers(c *gin.Context) {
 	if name != "" {
 		maps = "username LIKE '%" + name + "%'"
 	}
-	fmt.Println(maps)
 	page, pagesize := GetPage(c)
 	data := a.Service.GetUsers(page, pagesize, maps)
-	RespData(c, http.StatusOK, code, &data)
+	RespData(c, http.StatusOK, code, data)
 }
 
 //AddUser 新建用户

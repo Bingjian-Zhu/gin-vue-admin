@@ -1,17 +1,21 @@
 package repository
 
 import (
-	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
+	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
 )
 
 //RoleRepository 注入IDb
 type RoleRepository struct {
-	Source datasource.IDb `inject:""`
+	Log  logger.ILogger `inject:""`
+	Base BaseRepository `inject:"inline"`
 }
 
 //GetUserRoles 获取用户身份信息
-func (c *RoleRepository) GetUserRoles(userName string) (roles []models.Role) {
-	c.Source.DB().Where("user_name = ?", userName).Find(&roles)
-	return
+func (a *RoleRepository) GetUserRoles(where *models.Role) *[]models.Role {
+	var roles []models.Role
+	if err := a.Base.Find(where, &roles, ""); err != nil {
+		a.Log.Errorf("获取用户身份信息错误", err)
+	}
+	return &roles
 }

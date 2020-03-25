@@ -11,7 +11,7 @@ type IUserService interface {
 	//GetRoles 获取用户角色
 	GetRoles(username string) []string
 	//GetUsers 获取用户信息
-	GetUsers(page, pagesize int, maps interface{}) map[string]interface{}
+	GetUsers(page, pagesize int, maps interface{}) *map[string]interface{}
 	//AddUser 新建用户
 	AddUser(user *models.User) bool
 	//ExistUserByName 判断用户名是否已存在

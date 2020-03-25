@@ -12,7 +12,7 @@ import (
 	"github.com/bingjian-zhu/gin-vue-admin/common/helper"
 	"github.com/bingjian-zhu/gin-vue-admin/common/setting"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
-	"github.com/bingjian-zhu/gin-vue-admin/repository"
+	"github.com/bingjian-zhu/gin-vue-admin/service"
 )
 
 //### 如果是使用Go Module,gin-jwt模块应使用v2
@@ -24,8 +24,8 @@ import (
 
 // JWT 注入IService
 type JWT struct {
-	UserService repository.IUserRepository `inject:""`
-	RoleService repository.IRoleRepository `inject:""`
+	UserService service.IUserService `inject:""`
+	RoleService service.IRoleService `inject:""`
 }
 
 //JwtAuthorizator 定义身份授权事件类型
@@ -64,7 +64,7 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator JwtAuthorizator) (authMiddlew
 			//Set the identity
 			return &models.UserRole{
 				UserName:  roles["userName"].(string),
-				UserRoles: userRoles,
+				UserRoles: &userRoles,
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -120,7 +120,7 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator JwtAuthorizator) (authMiddlew
 //AdminAuthorizator role is admin can access
 func AdminAuthorizator(data interface{}, c *gin.Context) bool {
 	if v, ok := data.(*models.UserRole); ok {
-		for _, itemRole := range v.UserRoles {
+		for _, itemRole := range *v.UserRoles {
 			if itemRole.Value == "admin" {
 				return true
 			}

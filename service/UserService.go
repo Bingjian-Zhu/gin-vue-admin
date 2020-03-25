@@ -28,7 +28,7 @@ func (a *UserService) GetRoles(username string) []string {
 }
 
 //GetUsers 获取用户信息
-func (a *UserService) GetUsers(page, pagesize int, maps interface{}) map[string]interface{} {
+func (a *UserService) GetUsers(page, pagesize int, maps interface{}) *map[string]interface{} {
 	res := make(map[string]interface{}, 2)
 	var total uint64
 	users := a.Repository.GetUsers(page, pagesize, &total, maps)
@@ -47,7 +47,7 @@ func (a *UserService) GetUsers(page, pagesize int, maps interface{}) map[string]
 	}
 	res["list"] = &pageUsers
 	res["total"] = total
-	return res
+	return &res
 }
 
 //AddUser 新建用户

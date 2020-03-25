@@ -11,6 +11,7 @@ type RoleService struct {
 }
 
 //GetUserRoles 分页返回Articles获取用户身份信息
-func (c *RoleService) GetUserRoles(userName string) (roles []models.Role) {
-	return c.Repository.GetUserRoles(userName)
+func (c *RoleService) GetUserRoles(userName string) *[]models.Role {
+	where := models.Role{UserName: userName}
+	return c.Repository.GetUserRoles(&where)
 }
