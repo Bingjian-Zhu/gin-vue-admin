@@ -8,17 +8,18 @@ import (
 
 // Article 文章结构体
 type Article struct {
-	Model
-
-	State         int    `json:"state"`
-	TagID         int    `json:"tag_id"`
-	Title         string `json:"title"`
-	Desc          string `json:"desc"`
-	Content       string `json:"content"`
-	CoverImageURL string `json:"cover_image_url"`
-	CreatedBy     string `json:"created_by"`
-	ModifiedBy    string `json:"modified_by"`
-	Tag           Tag    `json:"tag"`
+	ID            int       `gorm:"primary_key" json:"id"`
+	CreatedOn     time.Time `json:"created_on"`
+	ModifiedOn    time.Time `json:"modified_on"`
+	State         int       `json:"state"`
+	TagID         int       `json:"tag_id"`
+	Title         string    `json:"title"`
+	Desc          string    `json:"desc"`
+	Content       string    `json:"content"`
+	CoverImageURL string    `json:"cover_image_url"`
+	CreatedBy     string    `json:"created_by"`
+	ModifiedBy    string    `json:"modified_by"`
+	Tag           Tag       `json:"tag"`
 }
 
 //BeforeCreate 在创建Article之前，先把创建时间赋值

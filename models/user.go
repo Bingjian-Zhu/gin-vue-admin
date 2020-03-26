@@ -8,15 +8,17 @@ import (
 
 //User 用户授权信息
 type User struct {
-	Model
-	Username   string `json:"username"`
-	Password   string `json:"password"`
-	Avatar     string `json:"avatar"`
-	UserType   int    `json:"user_type"`
-	Deleted    int    `json:"deteled"`
-	State      int    `json:"state"`
-	CreatedBy  string `json:"created_by"`
-	ModifiedBy string `json:"modified_by"`
+	ID         int       `gorm:"primary_key" json:"id"`
+	CreatedOn  time.Time `json:"created_on"`
+	ModifiedOn time.Time `json:"modified_on"`
+	Username   string    `json:"username"`
+	Password   string    `json:"password"`
+	Avatar     string    `json:"avatar"`
+	UserType   int       `json:"user_type"`
+	Deleted    int       `json:"deteled"`
+	State      int       `json:"state"`
+	CreatedBy  string    `json:"created_by"`
+	ModifiedBy string    `json:"modified_by"`
 }
 
 //BeforeCreate CreatedOn赋值

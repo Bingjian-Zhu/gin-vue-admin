@@ -18,7 +18,6 @@ import (
 // Article 注入IArticleService
 type Article struct {
 	Service service.IArticleService `inject:""`
-	//TagService     service.ITagService     `inject:""`
 }
 
 //GetArticle 获取单个文章

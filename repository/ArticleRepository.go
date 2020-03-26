@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"fmt"
-
 	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
 	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
@@ -16,20 +14,22 @@ type ArticleRepository struct {
 }
 
 //GetTables 分页返回Articles
-func (a *ArticleRepository) GetTables(PageNum int, PageSize int, maps map[string]interface{}) *[]models.Article {
+func (a *ArticleRepository) GetTables(PageNum, PageSize int, where interface{}) *[]models.Article {
 	var articles []models.Article
 	var total uint64
 	err := a.Base.GetPages(&models.Article{}, &articles, PageNum, PageSize, &total, "")
 	if err != nil {
-		fmt.Println(err)
+		a.Log.Errorf("GetTables函数出错：", err)
 	}
 	return &articles
 }
 
 //GetArticle 根据id获取Article
-func (a *ArticleRepository) GetArticle(id int) *models.Article {
+func (a *ArticleRepository) GetArticle(where interface{}) *models.Article {
 	var article models.Article
-	a.Source.DB().Where("id = ?", id).First(&article)
+	if err := a.Base.First(where, &article); err != nil {
+		a.Log.Errorf("未找到相关文章", err)
+	}
 	return &article
 }
 
@@ -40,9 +40,9 @@ func (a *ArticleRepository) AddArticle(article *models.Article) bool {
 }
 
 //GetArticles 获取文章
-func (a *ArticleRepository) GetArticles(PageNum int, PageSize int, total *uint64, maps interface{}) *[]models.Article {
+func (a *ArticleRepository) GetArticles(PageNum int, PageSize int, total *uint64, where interface{}) *[]models.Article {
 	var articles []models.Article
-	err := a.Base.GetPages(&models.Article{}, &articles, PageNum, PageSize, total, maps, "ID desc")
+	err := a.Base.GetPages(&models.Article{}, &articles, PageNum, PageSize, total, where, "ID desc")
 	if err != nil {
 		a.Log.Errorf("获取文章信息失败", err)
 	}
