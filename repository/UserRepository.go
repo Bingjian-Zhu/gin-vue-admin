@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
 	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
 	"github.com/jinzhu/gorm"
@@ -9,17 +8,15 @@ import (
 
 //UserRepository 注入IDb
 type UserRepository struct {
-	Source datasource.IDb `inject:""`
-	Log    logger.ILogger `inject:""`
-	Base   BaseRepository `inject:"inline"`
+	Log  logger.ILogger `inject:""`
+	Base BaseRepository `inject:"inline"`
 }
 
 //CheckUser 身份验证
 func (a *UserRepository) CheckUser(username string, password string) bool {
 	var user models.User
 	where := models.User{Username: username, Password: password}
-	err := a.Base.First(&where, &user)
-	if err != nil {
+	if err := a.Base.First(&where, &user); err != nil {
 		a.Log.Errorf("用户名或密码错误", err)
 		return false
 	}
@@ -31,11 +28,11 @@ func (a *UserRepository) GetUserAvatar(username string) string {
 	var user models.User
 	where := models.User{Username: username}
 	sel := "avatar"
-	err := a.Base.First(&where, &user, sel)
-	if err != nil {
-		a.Log.Error(err)
+	if err := a.Base.First(&where, &user, sel); err != nil {
+		a.Log.Errorf("未找到"+username+"该用户头像", err)
 		return ""
 	}
+
 	return user.Avatar
 }
 
@@ -45,14 +42,17 @@ func (a *UserRepository) GetRoles(username string) []string {
 	var user models.User
 	where := models.User{Username: username}
 	sel := "id"
-	err := a.Base.First(&where, &user, sel)
-	if err != nil {
-		a.Log.Error(err)
+	if err := a.Base.First(&where, &user, sel); err != nil {
+		a.Log.Errorf("获取用户角色失败", err)
 		return roles
 	}
 
 	var arrRole []models.Role
-	a.Source.DB().Select("value").Where(models.Role{UserID: user.ID}).Find(&arrRole)
+	whereRole := models.Role{UserID: user.ID}
+	selRole := "value"
+	if err := a.Base.Find(&whereRole, &arrRole, selRole); err != nil {
+		a.Log.Errorf("查找"+username+"的角色出错", err)
+	}
 	for _, role := range arrRole {
 		roles = append(roles, role.Value)
 	}
@@ -62,8 +62,7 @@ func (a *UserRepository) GetRoles(username string) []string {
 //GetUsers 获取用户信息
 func (a *UserRepository) GetUsers(PageNum int, PageSize int, total *uint64, maps interface{}) *[]models.User {
 	var users []models.User
-	err := a.Base.GetPages(&models.User{}, &users, PageNum, PageSize, total, maps)
-	if err != nil {
+	if err := a.Base.GetPages(&models.User{}, &users, PageNum, PageSize, total, maps); err != nil {
 		a.Log.Errorf("获取用户信息失败", err)
 	}
 	return &users

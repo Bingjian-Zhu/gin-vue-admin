@@ -1,16 +1,14 @@
 package repository
 
 import (
-	"github.com/bingjian-zhu/gin-vue-admin/common/datasource"
 	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
 )
 
 //ArticleRepository 注入IDb
 type ArticleRepository struct {
-	Source datasource.IDb `inject:""`
-	Log    logger.ILogger `inject:""`
-	Base   BaseRepository `inject:"inline"`
+	Log  logger.ILogger `inject:""`
+	Base BaseRepository `inject:"inline"`
 }
 
 //GetTables 分页返回Articles
@@ -35,7 +33,9 @@ func (a *ArticleRepository) GetArticle(where interface{}) *models.Article {
 
 //AddArticle 新增Article
 func (a *ArticleRepository) AddArticle(article *models.Article) bool {
-	a.Source.DB().Save(article)
+	if err := a.Base.Save(article); err != nil {
+		a.Log.Errorf("添加文章失败", err)
+	}
 	return true
 }
 

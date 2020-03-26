@@ -19,7 +19,7 @@ func (a *ArticleService) GetArticle(id int) *models.Article {
 //GetTables 分页返回文章
 func (a *ArticleService) GetTables(page, pagesize int) *[]models.Article {
 	where := models.Article{}
-	return a.Repository.GetTables(page, pagesize, where)
+	return a.Repository.GetTables(page, pagesize, &where)
 }
 
 //AddArticle 新增Article
