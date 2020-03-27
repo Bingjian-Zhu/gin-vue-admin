@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/bingjian-zhu/gin-vue-admin/models"
+	"github.com/bingjian-zhu/gin-vue-admin/page"
 )
 
 //IArticleService Article接口定义
@@ -9,7 +10,7 @@ type IArticleService interface {
 	//GetArticle 根据id获取Article
 	GetArticle(id int) *models.Article
 	//GetTables 分页返回文章
-	GetTables(page, pagesize int) *[]models.Article
+	GetTables(pageNum, pagesize int) *[]page.Article
 	//AddArticle 新增Article
 	AddArticle(article *models.Article) bool
 	//GetArticles 获取文章信息

@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -9,14 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/bingjian-zhu/gin-vue-admin/common/codes"
+	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
-	"github.com/bingjian-zhu/gin-vue-admin/page"
-	"github.com/bingjian-zhu/gin-vue-admin/page/emun"
 	"github.com/bingjian-zhu/gin-vue-admin/service"
 )
 
 // Article 注入IArticleService
 type Article struct {
+	Log     logger.ILogger          `inject:""`
 	Service service.IArticleService `inject:""`
 }
 
@@ -32,7 +31,7 @@ func (a *Article) GetArticle(c *gin.Context) {
 		code = codes.SUCCESS
 	} else {
 		for _, err := range valid.Errors {
-			log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+			a.Log.Info("err.key: %s, err.message: %s", err.Key, err.Message)
 		}
 	}
 	RespData(c, http.StatusOK, code, data)
@@ -40,21 +39,10 @@ func (a *Article) GetArticle(c *gin.Context) {
 
 //GetTables 获取多个文章
 func (a *Article) GetTables(c *gin.Context) {
-	var viewArticles []page.Article
-	var viewArticle page.Article
 	code := codes.SUCCESS
 	page, pagesize := GetPage(c)
-	articles := a.Service.GetTables(page, pagesize)
-	for _, article := range *articles {
-		viewArticle.ID = article.ID
-		viewArticle.Author = article.CreatedBy
-		viewArticle.DisplayTime = article.ModifiedOn.String()
-		viewArticle.Pageviews = 3474
-		viewArticle.Status = emun.GetArticleStatus(article.State)
-		viewArticle.Title = article.Title
-		viewArticles = append(viewArticles, viewArticle)
-	}
-	RespData(c, http.StatusOK, code, &viewArticles)
+	data := a.Service.GetTables(page, pagesize)
+	RespData(c, http.StatusOK, code, data)
 }
 
 //AddArticle 新增文章
@@ -79,11 +67,23 @@ func (a *Article) AddArticle(c *gin.Context) {
 			}
 		} else {
 			for _, err := range valid.Errors {
-				log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+				a.Log.Info("err.key: %s, err.message: %s", err.Key, err.Message)
 			}
 		}
 	}
 	RespOk(c, http.StatusOK, code)
+}
+
+//GetArticles 获取文章信息
+func (a *Article) GetArticles(c *gin.Context) {
+	res := make(map[string]interface{}, 2)
+	var total uint64
+	code := codes.SUCCESS
+	page, pagesize := GetPage(c)
+	articles := a.Service.GetArticles(page, pagesize, &total, "")
+	res["list"] = &articles
+	res["total"] = total
+	RespData(c, http.StatusOK, code, &res)
 }
 
 // //EditArticle 修改文章
@@ -142,15 +142,3 @@ func (a *Article) AddArticle(c *gin.Context) {
 // 	}
 // 	res.RespOk(c, http.StatusOK, code)
 // }
-
-//GetArticles 获取文章信息
-func (a *Article) GetArticles(c *gin.Context) {
-	res := make(map[string]interface{}, 2)
-	var total uint64
-	code := codes.SUCCESS
-	page, pagesize := GetPage(c)
-	articles := a.Service.GetArticles(page, pagesize, &total, "")
-	res["list"] = &articles
-	res["total"] = total
-	RespData(c, http.StatusOK, code, &res)
-}

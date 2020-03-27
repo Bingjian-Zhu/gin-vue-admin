@@ -2,6 +2,8 @@ package service
 
 import (
 	"github.com/bingjian-zhu/gin-vue-admin/models"
+	"github.com/bingjian-zhu/gin-vue-admin/page"
+	"github.com/bingjian-zhu/gin-vue-admin/page/emun"
 	"github.com/bingjian-zhu/gin-vue-admin/repository"
 )
 
@@ -17,9 +19,23 @@ func (a *ArticleService) GetArticle(id int) *models.Article {
 }
 
 //GetTables 分页返回文章
-func (a *ArticleService) GetTables(page, pagesize int) *[]models.Article {
+func (a *ArticleService) GetTables(pageNum, pagesize int) *[]page.Article {
+	var (
+		pageArticles []page.Article
+		pageArticle  page.Article
+	)
 	where := models.Article{}
-	return a.Repository.GetTables(page, pagesize, &where)
+	articles := a.Repository.GetTables(pageNum, pagesize, &where)
+	for _, article := range *articles {
+		pageArticle.ID = article.ID
+		pageArticle.Author = article.CreatedBy
+		pageArticle.DisplayTime = article.ModifiedOn.String()
+		pageArticle.Pageviews = 3474
+		pageArticle.Status = emun.GetArticleStatus(article.State)
+		pageArticle.Title = article.Title
+		pageArticles = append(pageArticles, pageArticle)
+	}
+	return &pageArticles
 }
 
 //AddArticle 新增Article

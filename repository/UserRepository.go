@@ -13,10 +13,9 @@ type UserRepository struct {
 }
 
 //CheckUser 身份验证
-func (a *UserRepository) CheckUser(username string, password string) bool {
+func (a *UserRepository) CheckUser(where interface{}) bool {
 	var user models.User
-	where := models.User{Username: username, Password: password}
-	if err := a.Base.First(&where, &user); err != nil {
+	if err := a.Base.First(where, &user); err != nil {
 		a.Log.Errorf("用户名或密码错误", err)
 		return false
 	}
@@ -60,9 +59,9 @@ func (a *UserRepository) GetRoles(username string) []string {
 }
 
 //GetUsers 获取用户信息
-func (a *UserRepository) GetUsers(PageNum int, PageSize int, total *uint64, maps interface{}) *[]models.User {
+func (a *UserRepository) GetUsers(PageNum int, PageSize int, total *uint64, where interface{}) *[]models.User {
 	var users []models.User
-	if err := a.Base.GetPages(&models.User{}, &users, PageNum, PageSize, total, maps); err != nil {
+	if err := a.Base.GetPages(&models.User{}, &users, PageNum, PageSize, total, where); err != nil {
 		a.Log.Errorf("获取用户信息失败", err)
 	}
 	return &users

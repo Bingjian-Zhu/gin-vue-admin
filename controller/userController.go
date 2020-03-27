@@ -1,13 +1,13 @@
 package controller
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/astaxie/beego/validation"
 	"github.com/bingjian-zhu/gin-vue-admin/common/codes"
+	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
 	"github.com/bingjian-zhu/gin-vue-admin/page"
 	"github.com/bingjian-zhu/gin-vue-admin/service"
@@ -23,6 +23,7 @@ import (
 
 //User 注入IUserService
 type User struct {
+	Log     logger.ILogger       `inject:""`
 	Service service.IUserService `inject:""`
 }
 
@@ -81,7 +82,7 @@ func (a *User) AddUser(c *gin.Context) {
 			}
 		} else {
 			for _, err := range valid.Errors {
-				log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+				a.Log.Info("err.key: %s, err.message: %s", err.Key, err.Message)
 			}
 		}
 	}
@@ -109,7 +110,7 @@ func (a *User) UpdateUser(c *gin.Context) {
 			}
 		} else {
 			for _, err := range valid.Errors {
-				log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+				a.Log.Info("err.key: %s, err.message: %s", err.Key, err.Message)
 			}
 		}
 	}
@@ -120,8 +121,6 @@ func (a *User) UpdateUser(c *gin.Context) {
 func (a *User) DeleteUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	code := codes.SUCCESS
-	// a.Service.DeleteUser(id)
-	// RespOk(c, http.StatusOK, code)
 	if !a.Service.DeleteUser(id) {
 		code = codes.ERROR
 		RespFail(c, http.StatusOK, code, "不允许删除admin账号!")

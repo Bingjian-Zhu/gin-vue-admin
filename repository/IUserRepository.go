@@ -5,13 +5,13 @@ import "github.com/bingjian-zhu/gin-vue-admin/models"
 //IUserRepository User接口定义
 type IUserRepository interface {
 	//CheckUser 身份验证
-	CheckUser(username string, password string) bool
+	CheckUser(where interface{}) bool
 	//GetUserAvatar 获取用户头像
 	GetUserAvatar(username string) string
 	//GetRoles 获取用户角色
 	GetRoles(username string) []string
 	//GetUsers 获取用户信息
-	GetUsers(PageNum int, PageSize int, total *uint64, maps interface{}) *[]models.User
+	GetUsers(PageNum int, PageSize int, total *uint64, where interface{}) *[]models.User
 	//AddUser 新建用户
 	AddUser(user *models.User) bool
 	//ExistUserByName 判断用户名是否已存在

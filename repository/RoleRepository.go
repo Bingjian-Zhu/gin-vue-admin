@@ -12,7 +12,7 @@ type RoleRepository struct {
 }
 
 //GetUserRoles 获取用户身份信息
-func (a *RoleRepository) GetUserRoles(where *models.Role) *[]models.Role {
+func (a *RoleRepository) GetUserRoles(where interface{}) *[]models.Role {
 	var roles []models.Role
 	if err := a.Base.Find(where, &roles, ""); err != nil {
 		a.Log.Errorf("获取用户身份信息错误", err)
