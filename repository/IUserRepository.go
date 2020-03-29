@@ -7,15 +7,15 @@ type IUserRepository interface {
 	//CheckUser 身份验证
 	CheckUser(where interface{}) bool
 	//GetUserAvatar 获取用户头像
-	GetUserAvatar(sel *string, where interface{}) string
-	//GetRoles 获取用户角色
-	GetRoles(username string) []string
+	GetUserAvatar(sel *string, where interface{}) *string
+	//GetUserID 获取用户ID
+	GetUserID(sel *string, where interface{}) int
 	//GetUsers 获取用户信息
 	GetUsers(PageNum int, PageSize int, total *uint64, where interface{}) *[]models.User
 	//AddUser 新建用户
 	AddUser(user *models.User) bool
 	//ExistUserByName 判断用户名是否已存在
-	ExistUserByName(username string) bool
+	ExistUserByName(where interface{}) bool
 	//UpdateUser 更新用户
 	UpdateUser(user *models.User) bool
 	//DeleteUser 更新用户

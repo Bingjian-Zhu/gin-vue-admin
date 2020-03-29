@@ -2,7 +2,7 @@ package page
 
 //User 用户登录信息结构体
 type User struct {
-	Roles        []string
+	Roles        *[]string
 	Introduction string
 	Avatar       string
 	Name         string

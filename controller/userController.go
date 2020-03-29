@@ -34,7 +34,7 @@ func (a *User) GetUserInfo(c *gin.Context) {
 	avatar := a.Service.GetUserAvatar(userName)
 	code := codes.SUCCESS
 	userRoles := a.Service.GetRoles(userName)
-	data := page.User{Roles: userRoles, Introduction: "", Avatar: avatar, Name: userName}
+	data := page.User{Roles: userRoles, Introduction: "", Avatar: *avatar, Name: userName}
 	RespData(c, http.StatusOK, code, &data)
 }
 

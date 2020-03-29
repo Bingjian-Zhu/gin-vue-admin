@@ -9,7 +9,8 @@ import (
 
 // UserService 注入IUserRepository
 type UserService struct {
-	Repository repository.IUserRepository `inject:""`
+	Repository     repository.IUserRepository `inject:""`
+	RoleRepository repository.IRoleRepository `inject:""`
 }
 
 //CheckUser 身份验证
@@ -19,15 +20,20 @@ func (a *UserService) CheckUser(username string, password string) bool {
 }
 
 //GetUserAvatar 获取用户头像
-func (a *UserService) GetUserAvatar(username string) string {
+func (a *UserService) GetUserAvatar(username string) *string {
 	where := models.User{Username: username}
 	sel := "avatar"
 	return a.Repository.GetUserAvatar(&sel, &where)
 }
 
 //GetRoles 获取用户角色
-func (a *UserService) GetRoles(username string) []string {
-	return a.Repository.GetRoles(username)
+func (a *UserService) GetRoles(username string) *[]string {
+	userWhere := models.User{Username: username}
+	userSel := "id"
+	userID := a.Repository.GetUserID(&userSel, &userWhere)
+	roleWhere := models.Role{UserID: userID}
+	roleSel := "value"
+	return a.RoleRepository.GetRoles(&roleSel, &roleWhere)
 }
 
 //GetUsers 获取用户信息
@@ -53,14 +59,34 @@ func (a *UserService) GetUsers(page, pagesize int, maps interface{}) interface{}
 	return &res
 }
 
-//AddUser 新建用户
+//AddUser 新建用户，同时新建用户角色
 func (a *UserService) AddUser(user *models.User) bool {
-	return a.Repository.AddUser(user)
+	//此处不能使用事务同时创建用户和角色，因为Role表中需要UserID，而UserID需要插入用户数据后才生成，所以不能用事务，否则会报错
+	//用业务逻辑实现事务效果
+	isOK := a.Repository.AddUser(user)
+	if !isOK {
+		return false
+	}
+	//当成功插入User数据后，user为指针地址，可以获取到ID的值。省去了查数据库拿ID的值步骤
+	var role models.Role
+	role.UserID = user.ID
+	role.UserName = user.Username
+	role.Value = "test"
+	if user.UserType == 1 {
+		role.Value = "admin"
+	}
+	isOK = a.RoleRepository.AddRole(&role)
+	if isOK {
+		return true
+	}
+	//插入role失败后，删除新插入的用户信息，达到事务处理效果
+	return a.Repository.DeleteUser(user.ID)
 }
 
 //ExistUserByName 判断用户名是否已存在
 func (a *UserService) ExistUserByName(username string) bool {
-	return a.Repository.ExistUserByName(username)
+	where := models.User{Username: username}
+	return a.Repository.ExistUserByName(&where)
 }
 
 //UpdateUser 更新用户

@@ -19,3 +19,25 @@ func (a *RoleRepository) GetUserRoles(where interface{}) *[]models.Role {
 	}
 	return &roles
 }
+
+//GetRoles 获取用户角色
+func (a *RoleRepository) GetRoles(sel *string, where interface{}) *[]string {
+	var arrRole []string
+	var roles []models.Role
+	if err := a.Base.Find(where, &roles, *sel); err != nil {
+		a.Log.Errorf("获取用户角色失败", err)
+	}
+	for _, role := range roles {
+		arrRole = append(arrRole, role.Value)
+	}
+	return &arrRole
+}
+
+//AddRole 添加用户角色
+func (a *RoleRepository) AddRole(role *models.Role) bool {
+	if err := a.Base.Create(&role); err != nil {
+		a.Log.Errorf("添加用户角色失败", role)
+		return false
+	}
+	return true
+}

@@ -23,36 +23,22 @@ func (a *UserRepository) CheckUser(where interface{}) bool {
 }
 
 //GetUserAvatar 获取用户头像
-func (a *UserRepository) GetUserAvatar(sel *string, where interface{}) string {
+func (a *UserRepository) GetUserAvatar(sel *string, where interface{}) *string {
 	var user models.User
-	if err := a.Base.First(&where, &user, *sel); err != nil {
+	if err := a.Base.First(where, &user, *sel); err != nil {
 		a.Log.Errorf("获取用户头像失败", err)
-		return ""
 	}
-	return user.Avatar
+	return &user.Avatar
 }
 
-//GetRoles 获取用户角色
-func (a *UserRepository) GetRoles(username string) []string {
-	var roles []string
+//GetUserID 获取用户ID
+func (a *UserRepository) GetUserID(sel *string, where interface{}) int {
 	var user models.User
-	where := models.User{Username: username}
-	sel := "id"
-	if err := a.Base.First(&where, &user, sel); err != nil {
-		a.Log.Errorf("获取用户角色失败", err)
-		return roles
+	if err := a.Base.First(where, &user, *sel); err != nil {
+		a.Log.Errorf("获取用户ID失败", err)
+		return -1
 	}
-
-	var arrRole []models.Role
-	whereRole := models.Role{UserID: user.ID}
-	selRole := "value"
-	if err := a.Base.Find(&whereRole, &arrRole, selRole); err != nil {
-		a.Log.Errorf("查找"+username+"的角色出错", err)
-	}
-	for _, role := range arrRole {
-		roles = append(roles, role.Value)
-	}
-	return roles
+	return user.ID
 }
 
 //GetUsers 获取用户信息
@@ -66,30 +52,16 @@ func (a *UserRepository) GetUsers(PageNum int, PageSize int, total *uint64, wher
 
 //AddUser 新建用户
 func (a *UserRepository) AddUser(user *models.User) bool {
-	var role models.Role
-	//此处不能使用事务同时创建用户和角色，因为Role表中需要UserID，而UserID需要插入用户数据后才生成，所以不能用事务，否则会报错
 	if err := a.Base.Create(user); err != nil {
 		a.Log.Errorf("新建用户失败", err)
-		return false
-	}
-	//当成功插入User数据后，user为指针地址，可以获取到ID的值。省去了查数据库拿ID的值步骤
-	role.UserID = user.ID
-	role.UserName = user.Username
-	role.Value = "test"
-	if user.UserType == 1 {
-		role.Value = "admin"
-	}
-	if err := a.Base.Create(&role); err != nil {
-		a.Log.Errorf("新建用户是创建角色失败", role)
 		return false
 	}
 	return true
 }
 
 //ExistUserByName 判断用户名是否已存在
-func (a *UserRepository) ExistUserByName(username string) bool {
+func (a *UserRepository) ExistUserByName(where interface{}) bool {
 	var user models.User
-	where := models.User{Username: username}
 	sel := "id"
 	err := a.Base.First(&where, &user, sel)
 	//记录不存在错误(RecordNotFound)，返回false
