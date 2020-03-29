@@ -20,7 +20,9 @@ func (a *UserService) CheckUser(username string, password string) bool {
 
 //GetUserAvatar 获取用户头像
 func (a *UserService) GetUserAvatar(username string) string {
-	return a.Repository.GetUserAvatar(username)
+	where := models.User{Username: username}
+	sel := "avatar"
+	return a.Repository.GetUserAvatar(&sel, &where)
 }
 
 //GetRoles 获取用户角色

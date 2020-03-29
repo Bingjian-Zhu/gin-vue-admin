@@ -23,15 +23,12 @@ func (a *UserRepository) CheckUser(where interface{}) bool {
 }
 
 //GetUserAvatar 获取用户头像
-func (a *UserRepository) GetUserAvatar(username string) string {
+func (a *UserRepository) GetUserAvatar(sel *string, where interface{}) string {
 	var user models.User
-	where := models.User{Username: username}
-	sel := "avatar"
-	if err := a.Base.First(&where, &user, sel); err != nil {
-		a.Log.Errorf("未找到"+username+"该用户头像", err)
+	if err := a.Base.First(&where, &user, *sel); err != nil {
+		a.Log.Errorf("获取用户头像失败", err)
 		return ""
 	}
-
 	return user.Avatar
 }
 
