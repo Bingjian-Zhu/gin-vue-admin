@@ -91,7 +91,7 @@ func (a *UserRepository) UpdateUser(modUser *models.User) bool {
 
 	var role models.Role
 	where := models.Role{UserID: user.ID}
-	err = a.Base.First(&where, &role)
+	a.Base.First(&where, &role)
 	role.UserName = user.Username
 	role.Value = "test"
 	if user.UserType == 1 {
@@ -104,7 +104,7 @@ func (a *UserRepository) UpdateUser(modUser *models.User) bool {
 		tx.Rollback()
 		return false
 	}
-	if err := tx.Save(role).Error; err != nil {
+	if err := tx.Save(&role).Error; err != nil {
 		a.Log.Errorf("更新用户角色失败", err)
 		tx.Rollback()
 		return false

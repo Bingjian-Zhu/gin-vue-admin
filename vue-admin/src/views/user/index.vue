@@ -262,6 +262,11 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
+          if (tempData.user_type === '管理员') {
+            tempData.user_type = 1
+          } else if (tempData.user_type === '测试用户') {
+            tempData.user_type = 2
+          }
           updateUser(tempData).then(() => {
             this.fetchData()
             this.dialogFormVisible = false
