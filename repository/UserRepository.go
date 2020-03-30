@@ -77,26 +77,7 @@ func (a *UserRepository) ExistUserByName(where interface{}) bool {
 }
 
 //UpdateUser 更新用户
-func (a *UserRepository) UpdateUser(modUser *models.User) bool {
-	var user models.User
-	err := a.Base.FirstByID(&user, modUser.ID)
-	if err != nil {
-		a.Log.Error(err)
-		return false
-	}
-	user.Username = modUser.Username
-	user.Password = modUser.Password
-	user.ModifiedBy = modUser.ModifiedBy
-	user.UserType = modUser.UserType
-
-	var role models.Role
-	where := models.Role{UserID: user.ID}
-	a.Base.First(&where, &role)
-	role.UserName = user.Username
-	role.Value = "test"
-	if user.UserType == 1 {
-		role.Value = "admin"
-	}
+func (a *UserRepository) UpdateUser(user *models.User, role *models.Role) bool {
 	//使用事务同时更新用户数据和角色数据
 	tx := a.Base.GetTransaction()
 	if err := tx.Save(user).Error; err != nil {
@@ -115,23 +96,29 @@ func (a *UserRepository) UpdateUser(modUser *models.User) bool {
 
 //DeleteUser 删除用户同时删除用户的角色
 func (a *UserRepository) DeleteUser(id int) bool {
-	var user models.User
-	err := a.Base.FirstByID(&user, id)
-	if err != nil || user.Username == "admin" {
-		a.Log.Errorf("删除用户失败:不能删除admin账号")
-		return false
-	}
-	var role models.Role
-	where := models.Role{UserID: id}
 	//采用事务同时删除用户和相应的用户角色
+	var (
+		userWhere = models.User{ID: id}
+		user      models.User
+		roleWhere = models.Role{UserID: id}
+		role      models.Role
+	)
 	tx := a.Base.GetTransaction()
-	tx.Where(&where).Delete(&role)
-	err = tx.Where("id=?", id).Delete(&user).Error
-	if err != nil {
+	tx.Where(&roleWhere).Delete(&role)
+	if err := tx.Where(&userWhere).Delete(&user).Error; err != nil {
 		a.Log.Errorf("删除用户失败", err)
 		tx.Rollback()
 		return false
 	}
 	tx.Commit()
 	return true
+}
+
+//GetUserByID 获取用户
+func (a *UserRepository) GetUserByID(id int) *models.User {
+	var user models.User
+	if err := a.Base.FirstByID(&user, id); err != nil {
+		a.Log.Error(err)
+	}
+	return &user
 }

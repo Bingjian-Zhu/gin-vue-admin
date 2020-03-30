@@ -36,8 +36,17 @@ func (a *RoleRepository) GetRoles(sel *string, where interface{}) *[]string {
 //AddRole 添加用户角色
 func (a *RoleRepository) AddRole(role *models.Role) bool {
 	if err := a.Base.Create(&role); err != nil {
-		a.Log.Errorf("添加用户角色失败", role)
+		a.Log.Errorf("添加用户角色失败", err)
 		return false
 	}
 	return true
+}
+
+//GetRole 获取角色
+func (a *RoleRepository) GetRole(where interface{}) *models.Role {
+	var role models.Role
+	if err := a.Base.First(where, &role); err != nil {
+		a.Log.Errorf("获取角色失败", err)
+	}
+	return &role
 }

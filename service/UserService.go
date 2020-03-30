@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
 	pageModel "github.com/bingjian-zhu/gin-vue-admin/page"
 	"github.com/bingjian-zhu/gin-vue-admin/page/emun"
@@ -11,6 +12,7 @@ import (
 type UserService struct {
 	Repository     repository.IUserRepository `inject:""`
 	RoleRepository repository.IRoleRepository `inject:""`
+	Log            logger.ILogger             `inject:""`
 }
 
 //CheckUser 身份验证
@@ -90,11 +92,29 @@ func (a *UserService) ExistUserByName(username string) bool {
 }
 
 //UpdateUser 更新用户
-func (a *UserService) UpdateUser(user *models.User) bool {
-	return a.Repository.UpdateUser(user)
+func (a *UserService) UpdateUser(modUser *models.User) bool {
+	user := a.Repository.GetUserByID(modUser.ID)
+	//不允许更新用户名
+	// user.Username = modUser.Username
+	user.Password = modUser.Password
+	user.ModifiedBy = modUser.ModifiedBy
+	user.UserType = modUser.UserType
+	roleWhere := models.Role{UserID: user.ID}
+	role := a.RoleRepository.GetRole(&roleWhere)
+	// role.UserName = user.Username
+	role.Value = "test"
+	if user.UserType == 1 {
+		role.Value = "admin"
+	}
+	return a.Repository.UpdateUser(user, role)
 }
 
 //DeleteUser 删除用户
 func (a *UserService) DeleteUser(id int) bool {
+	user := a.Repository.GetUserByID(id)
+	if user.Username == "admin" {
+		a.Log.Errorf("删除用户失败:不能删除admin账号")
+		return false
+	}
 	return a.Repository.DeleteUser(id)
 }

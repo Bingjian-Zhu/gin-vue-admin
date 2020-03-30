@@ -10,4 +10,6 @@ type IRoleRepository interface {
 	GetRoles(sel *string, where interface{}) *[]string
 	//AddRole 添加用户角色
 	AddRole(role *models.Role) bool
+	//GetRole 获取角色
+	GetRole(where interface{}) *models.Role
 }
