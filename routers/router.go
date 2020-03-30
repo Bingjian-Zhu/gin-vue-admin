@@ -39,7 +39,7 @@ func Configure(r *gin.Engine) {
 	zap := logger.Logger{}
 	//Injection
 	var injector inject.Graph
-	err := injector.Provide(
+	if err := injector.Provide(
 		&inject.Object{Value: &article},
 		&inject.Object{Value: &db},
 		&inject.Object{Value: &zap},
@@ -52,8 +52,7 @@ func Configure(r *gin.Engine) {
 		&inject.Object{Value: &service.RoleService{}},
 		&inject.Object{Value: &myjwt},
 		&inject.Object{Value: &repository.BaseRepository{}},
-	)
-	if err != nil {
+	); err != nil {
 		log.Fatal("inject fatal: ", err)
 	}
 	if err := injector.Populate(); err != nil {
@@ -62,8 +61,7 @@ func Configure(r *gin.Engine) {
 	//zap log init
 	zap.Init()
 	//database connect
-	err = db.Connect()
-	if err != nil {
+	if err := db.Connect(); err != nil {
 		log.Fatal("db fatal:", err)
 	}
 	var authMiddleware = myjwt.GinJWTMiddlewareInit(jwt.AllUserAuthorizator)
