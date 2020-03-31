@@ -104,6 +104,7 @@ export default {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
+            this.$message.error('用户名或密码错误')
             this.loading = false
           })
         } else {
