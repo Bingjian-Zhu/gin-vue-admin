@@ -81,8 +81,12 @@ export const constantRoutes = [
         meta: { title: 'Tree', icon: 'tree' }
       }
     ]
-  },
+  }
+]
 
+// 异步挂载的路由
+// 动态需要根据权限加载的路由表
+export const asyncRoutes = [
   {
     path: '/user',
     component: Layout,
@@ -91,11 +95,14 @@ export const constantRoutes = [
         path: 'index',
         name: '用户管理',
         component: () => import('@/views/user/index'),
-        meta: { title: '用户管理', icon: 'form' }
+        meta: {
+          title: '用户管理',
+          icon: 'form',
+          roles: ['admin']
+        }
       }
     ]
   },
-
   {
     path: '/form',
     component: Layout,
@@ -103,32 +110,31 @@ export const constantRoutes = [
     name: '文章管理',
     meta: {
       title: '文章管理',
-      icon: 'form'
+      icon: 'form',
+      roles: ['admin']
     },
     children: [
       {
         path: 'create',
         component: () => import('@/views/form/create'),
         name: 'CreateArticle',
-        meta: { title: '新建文章', icon: 'edit' }
+        meta: { title: '新建文章', icon: 'edit', roles: ['admin'] }
       },
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/form/edit'),
         name: 'EditArticle',
-        meta: { title: '编辑文章', noCache: true, activeMenu: '/form/list' },
+        meta: { title: '编辑文章', noCache: true, activeMenu: '/form/list', roles: ['admin'] },
         hidden: true
       },
       {
         path: 'list',
         component: () => import('@/views/form/list'),
         name: 'ArticleList',
-        meta: { title: '文章列表', icon: 'list' }
+        meta: { title: '文章列表', icon: 'list', roles: ['admin'] }
       }
     ]
   },
-
-  // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 

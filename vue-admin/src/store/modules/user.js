@@ -6,6 +6,7 @@ const state = {
   token: getToken(),
   name: '',
   avatar: '',
+  roles: [],
   tokenExpire: getTokenExpire()
 }
 
@@ -18,6 +19,9 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   },
   SET_TOKENEXPIRE: (state, token) => {
     state.tokenExpire = token
@@ -65,7 +69,14 @@ const actions = {
         if (!data) {
           reject('Verification failed, please Login again.')
         }
-        const { Name, Avatar } = data
+        const { Name, Avatar, Roles } = data
+
+        // roles must be a non-empty array
+        if (!Roles || Roles.length <= 0) {
+          reject('getInfo: roles must be a non-null array!')
+        }
+
+        commit('SET_ROLES', Roles)
         commit('SET_NAME', Name)
         commit('SET_AVATAR', Avatar)
         resolve(data)
@@ -81,6 +92,9 @@ const actions = {
       logout(state.token).then(() => {
         commit('SET_TOKEN', '')
         commit('SET_TOKENEXPIRE', '')
+        commit('SET_ROLES', '')
+        commit('SET_NAME', '')
+        commit('SET_AVATAR', [])
         removeToken()
         removeTokenExpire()
         resetRouter()
