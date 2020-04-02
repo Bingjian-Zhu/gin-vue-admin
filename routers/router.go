@@ -73,6 +73,7 @@ func Configure(r *gin.Engine) {
 	}
 	userAPI.Use(authMiddleware.MiddlewareFunc())
 	{
+		userAPI.GET("/table/list", article.GetTables)
 		userAPI.GET("/info", user.GetUserInfo)
 		userAPI.POST("/logout", user.Logout)
 	}
@@ -83,7 +84,7 @@ func Configure(r *gin.Engine) {
 	apiv1.Use(adminMiddleware.MiddlewareFunc())
 	{
 		//vue获取table信息
-		apiv1.GET("/table/list", article.GetTables)
+		//apiv1.GET("/table/list", article.GetTables)
 		apiv1.GET("/user/list", user.GetUsers)
 		apiv1.POST("/user", user.AddUser)
 		apiv1.PUT("/user", user.UpdateUser)
