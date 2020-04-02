@@ -1,4 +1,6 @@
 # gin-vue-admin
+![展示](https://img2020.cnblogs.com/blog/1508611/202004/1508611-20200402120018890-1587963047.gif)
+
 该项目是gin+vue的前后端分离项目，使用gorm访问MySQL
 
 项目结构进行分层，使用依赖注入的方式对项目进行解耦，[教程](https://bingjian-zhu.github.io/2019/11/06/Gin%E5%AE%9E%E7%8E%B0%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/)
