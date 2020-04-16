@@ -36,5 +36,5 @@ func (user *User) BeforeUpdate(scope *gorm.Scope) error {
 // UserRole 用户身份结构体
 type UserRole struct {
 	UserName  string
-	UserRoles []Role
+	UserRoles []*Role
 }

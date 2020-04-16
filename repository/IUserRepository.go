@@ -11,7 +11,7 @@ type IUserRepository interface {
 	//GetUserID 获取用户ID
 	GetUserID(sel *string, where interface{}) int
 	//GetUsers 获取用户信息
-	GetUsers(PageNum int, PageSize int, total *uint64, where interface{}) []models.User
+	GetUsers(PageNum int, PageSize int, total *uint64, where interface{}) []*models.User
 	//AddUser 新建用户
 	AddUser(user *models.User) bool
 	//ExistUserByName 判断用户名是否已存在

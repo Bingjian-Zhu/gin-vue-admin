@@ -14,7 +14,7 @@ type IArticleService interface {
 	//AddArticle 新增Article
 	AddArticle(article *models.Article) bool
 	//GetArticles 获取文章信息
-	GetArticles(PageNum int, PageSize int, total *uint64, where interface{}) []models.Article
+	GetArticles(PageNum int, PageSize int, total *uint64, where interface{}) []*models.Article
 	// //ExistArticleByID 根据ID判断Article是否存在
 	// ExistArticleByID(id int) bool
 	// //EditArticle 编辑Article

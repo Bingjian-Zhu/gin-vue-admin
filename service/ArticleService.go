@@ -44,7 +44,7 @@ func (a *ArticleService) AddArticle(article *models.Article) bool {
 }
 
 //GetArticles 获取文章信息
-func (a *ArticleService) GetArticles(PageNum int, PageSize int, total *uint64, where interface{}) []models.Article {
+func (a *ArticleService) GetArticles(PageNum int, PageSize int, total *uint64, where interface{}) []*models.Article {
 	return a.Repository.GetArticles(PageNum, PageSize, total, where)
 }
 

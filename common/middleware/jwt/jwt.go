@@ -28,7 +28,7 @@ type JWT struct {
 	RoleService service.IRoleService `inject:""`
 }
 
-//JwtAuthorizator 定义身份授权事件类型
+// JwtAuthorizator 定义身份授权事件类型
 type JwtAuthorizator func(data interface{}, c *gin.Context) bool
 
 //app 程序配置
@@ -59,7 +59,7 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator JwtAuthorizator) (authMiddlew
 			roles := jwt.ExtractClaims(c)
 			//extracts identity from roles
 			jsonRole := roles["userRoles"].(string)
-			var userRoles []models.Role
+			var userRoles []*models.Role
 			json.Unmarshal(helper.S2B(jsonRole), &userRoles)
 			//Set the identity
 			return &models.UserRole{

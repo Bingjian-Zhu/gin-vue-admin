@@ -12,8 +12,8 @@ type ArticleRepository struct {
 }
 
 //GetTables 分页返回Articles
-func (a *ArticleRepository) GetTables(PageNum, PageSize int, where interface{}) []models.Article {
-	var articles []models.Article
+func (a *ArticleRepository) GetTables(PageNum, PageSize int, where interface{}) []*models.Article {
+	var articles []*models.Article
 	var total uint64
 	err := a.Base.GetPages(&models.Article{}, &articles, PageNum, PageSize, &total, "")
 	if err != nil {
@@ -40,8 +40,8 @@ func (a *ArticleRepository) AddArticle(article *models.Article) bool {
 }
 
 //GetArticles 获取文章
-func (a *ArticleRepository) GetArticles(PageNum int, PageSize int, total *uint64, where interface{}) []models.Article {
-	var articles []models.Article
+func (a *ArticleRepository) GetArticles(PageNum int, PageSize int, total *uint64, where interface{}) []*models.Article {
+	var articles []*models.Article
 	err := a.Base.GetPages(&models.Article{}, &articles, PageNum, PageSize, total, where, "ID desc")
 	if err != nil {
 		a.Log.Errorf("获取文章信息失败", err)
