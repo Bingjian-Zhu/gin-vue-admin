@@ -9,7 +9,7 @@ type IUserService interface {
 	//GetUserAvatar 获取用户头像
 	GetUserAvatar(username string) *string
 	//GetRoles 获取用户角色
-	GetRoles(username string) *[]string
+	GetRoles(username string) []string
 	//GetUsers 获取用户信息
 	GetUsers(page, pagesize int, maps interface{}) interface{}
 	//AddUser 新建用户

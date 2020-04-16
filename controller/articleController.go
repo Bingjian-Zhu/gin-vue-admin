@@ -81,7 +81,7 @@ func (a *Article) GetArticles(c *gin.Context) {
 	code := codes.SUCCESS
 	page, pagesize := GetPage(c)
 	articles := a.Service.GetArticles(page, pagesize, &total, "")
-	res["list"] = &articles
+	res["list"] = articles
 	res["total"] = total
 	RespData(c, http.StatusOK, code, &res)
 }

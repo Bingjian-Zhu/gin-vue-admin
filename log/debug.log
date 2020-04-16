@@ -1,2 +1,3 @@
 ﻿{"level":"error","ts":"2020-03-29T11:07:18.959+0800","caller":"repository/UserRepository.go:73","msg":"invalid query condition: 0x1251ada8"}
 {"level":"error","ts":"2020-03-30T16:42:13.236+0800","caller":"repository/UserRepository.go:73","msg":"invalid query condition: 0x12007bd0"}
+{"level":"error","ts":"2020-04-16T10:27:24.753+0800","caller":"repository/UserRepository.go:73","msg":"invalid query condition: 0x12532b30"}

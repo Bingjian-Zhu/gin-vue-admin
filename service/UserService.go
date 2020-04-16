@@ -29,7 +29,7 @@ func (a *UserService) GetUserAvatar(username string) *string {
 }
 
 //GetRoles 获取用户角色
-func (a *UserService) GetRoles(username string) *[]string {
+func (a *UserService) GetRoles(username string) []string {
 	userWhere := models.User{Username: username}
 	userSel := "id"
 	userID := a.Repository.GetUserID(&userSel, &userWhere)
@@ -45,7 +45,7 @@ func (a *UserService) GetUsers(page, pagesize int, maps interface{}) interface{}
 	users := a.Repository.GetUsers(page, pagesize, &total, maps)
 	var pageUsers []pageModel.Users
 	var pageUser pageModel.Users
-	for _, user := range *users {
+	for _, user := range users {
 		pageUser.ID = user.ID
 		pageUser.Name = user.Username
 		pageUser.Password = user.Password
@@ -56,7 +56,7 @@ func (a *UserService) GetUsers(page, pagesize int, maps interface{}) interface{}
 		pageUser.CreatedOn = user.CreatedOn.Format("2006-01-02 15:04:05")
 		pageUsers = append(pageUsers, pageUser)
 	}
-	res["list"] = &pageUsers
+	res["list"] = pageUsers
 	res["total"] = total
 	return &res
 }

@@ -64,7 +64,7 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator JwtAuthorizator) (authMiddlew
 			//Set the identity
 			return &models.UserRole{
 				UserName:  roles["userName"].(string),
-				UserRoles: &userRoles,
+				UserRoles: userRoles,
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -120,7 +120,7 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator JwtAuthorizator) (authMiddlew
 //AdminAuthorizator role is admin can access
 func AdminAuthorizator(data interface{}, c *gin.Context) bool {
 	if v, ok := data.(*models.UserRole); ok {
-		for _, itemRole := range *v.UserRoles {
+		for _, itemRole := range v.UserRoles {
 			if itemRole.Value == "admin" {
 				return true
 			}
