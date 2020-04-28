@@ -50,25 +50,14 @@ func (a *Article) AddArticle(c *gin.Context) {
 	article := models.Article{}
 	code := codes.InvalidParams
 	err := c.Bind(&article)
-	if err == nil {
+	if err != nil {
+		a.Log.Error(err)
+	} else {
 		article.ModifiedOn = article.CreatedOn
-		valid := validation.Validation{}
-		valid.Min(article.TagID, 0, "tag_id").Message("标签ID必须不小于0")
-		valid.Required(article.Title, "title").Message("标题不能为空")
-		valid.Required(article.Desc, "desc").Message("简述不能为空")
-		valid.Required(article.Content, "content").Message("内容不能为空")
-		valid.Required(article.CreatedBy, "created_by").Message("创建人不能为空")
-		valid.Range(article.State, 0, 1, "state").Message("状态只允许0或1")
-		if !valid.HasErrors() {
-			if a.Service.AddArticle(&article) {
-				code = codes.SUCCESS
-			} else {
-				code = codes.ERROR
-			}
+		if a.Service.AddArticle(&article) {
+			code = codes.SUCCESS
 		} else {
-			for _, err := range valid.Errors {
-				a.Log.Info("err.key: %s, err.message: %s", err.Key, err.Message)
-			}
+			code = codes.ERROR
 		}
 	}
 	RespOk(c, http.StatusOK, code)

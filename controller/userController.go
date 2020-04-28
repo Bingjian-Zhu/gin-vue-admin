@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
-	"github.com/astaxie/beego/validation"
 	"github.com/bingjian-zhu/gin-vue-admin/common/codes"
 	"github.com/bingjian-zhu/gin-vue-admin/common/logger"
 	"github.com/bingjian-zhu/gin-vue-admin/models"
@@ -61,29 +60,22 @@ func (a *User) AddUser(c *gin.Context) {
 	user := models.User{}
 	code := codes.InvalidParams
 	err := c.Bind(&user)
-	if err == nil {
-		valid := validation.Validation{}
-		valid.Required(user.Username, "username").Message("用户名不能为空")
-		valid.Required(user.Password, "password").Message("密码不能为空")
-		if !valid.HasErrors() {
-			roles := jwt.ExtractClaims(c)
-			createdBy := roles["userName"].(string)
-			user.CreatedBy = createdBy
-			user.State = 1
-			user.Avatar = "https://zbj-bucket1.oss-cn-shenzhen.aliyuncs.com/avatar.JPG"
-			if !a.Service.ExistUserByName(user.Username) {
-				if a.Service.AddUser(&user) {
-					code = codes.SUCCESS
-				} else {
-					code = codes.ERROR
-				}
+	if err != nil {
+		a.Log.Error(err)
+	} else {
+		roles := jwt.ExtractClaims(c)
+		createdBy := roles["userName"].(string)
+		user.CreatedBy = createdBy
+		user.State = 1
+		user.Avatar = "https://zbj-bucket1.oss-cn-shenzhen.aliyuncs.com/avatar.JPG"
+		if !a.Service.ExistUserByName(user.Username) {
+			if a.Service.AddUser(&user) {
+				code = codes.SUCCESS
 			} else {
-				code = codes.ErrExistUser
+				code = codes.ERROR
 			}
 		} else {
-			for _, err := range valid.Errors {
-				a.Log.Info("err.key: %s, err.message: %s", err.Key, err.Message)
-			}
+			code = codes.ErrExistUser
 		}
 	}
 
@@ -95,23 +87,16 @@ func (a *User) UpdateUser(c *gin.Context) {
 	user := models.User{}
 	code := codes.InvalidParams
 	err := c.Bind(&user)
-	if err == nil {
-		valid := validation.Validation{}
-		valid.Required(user.Username, "username").Message("用户名不能为空")
-		valid.Required(user.Password, "password").Message("密码不能为空")
-		if !valid.HasErrors() {
-			roles := jwt.ExtractClaims(c)
-			modifiedBy := roles["userName"].(string)
-			user.ModifiedBy = modifiedBy
-			if a.Service.UpdateUser(&user) {
-				code = codes.SUCCESS
-			} else {
-				code = codes.ERROR
-			}
+	if err != nil {
+		a.Log.Error(err)
+	} else {
+		roles := jwt.ExtractClaims(c)
+		modifiedBy := roles["userName"].(string)
+		user.ModifiedBy = modifiedBy
+		if a.Service.UpdateUser(&user) {
+			code = codes.SUCCESS
 		} else {
-			for _, err := range valid.Errors {
-				a.Log.Info("err.key: %s, err.message: %s", err.Key, err.Message)
-			}
+			code = codes.ERROR
 		}
 	}
 	RespOk(c, http.StatusOK, code)

@@ -11,8 +11,8 @@ type User struct {
 	ID         int       `gorm:"primary_key" json:"id"`
 	CreatedOn  time.Time `json:"created_on"`
 	ModifiedOn time.Time `json:"modified_on"`
-	Username   string    `json:"username"`
-	Password   string    `json:"password"`
+	Username   string    `json:"username" validate:"required"`
+	Password   string    `json:"password" validate:"required"`
 	Avatar     string    `json:"avatar"`
 	UserType   int       `json:"user_type"`
 	Deleted    int       `json:"deteled"`
