@@ -73,7 +73,7 @@ func init() {
 //getConf 读取配置文件
 func getConf() *Conf {
 	var c *Conf
-	file, err := ioutil.ReadFile("../Config/config.yml")
+	file, err := ioutil.ReadFile("../config/config.yml")
 	if err != nil {
 		log.Println("[Setting] config error: ", err)
 	}

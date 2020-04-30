@@ -1,5 +1,5 @@
 # gin-vue-admin
-![https://img2020.cnblogs.com/blog/1508611/202004/1508611-20200402120018890-1587963047.gif](https://img2020.cnblogs.com/blog/1508611/202004/1508611-20200402120018890-1587963047.gif)
+* [演示地址](http://zbj-home.picp.io)：入门级服务器，轻点~~
 
 * 该项目是gin+vue的前后端分离项目，使用gorm访问MySQL
 
