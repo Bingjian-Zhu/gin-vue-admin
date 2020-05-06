@@ -14,6 +14,8 @@
 
 * 使用[go-playground/validator](https://github.com/go-playground/validator)开源库简化gin的请求校验---[gin请求数据校验教程](https://bingjian-zhu.github.io/2020/04/28/gin%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C/)
 
+* 用Docker上云---[多阶段构建Golang程序Docker镜像教程](https://bingjian-zhu.github.io/2020/05/06/%E5%A4%9A%E9%98%B6%E6%AE%B5%E6%9E%84%E5%BB%BAGolang%E7%A8%8B%E5%BA%8FDocker%E9%95%9C%E5%83%8F/)
+
 * 在token过期后的半个小时内，用户再次操作会自动刷新token
 
 ### 项目结构
