@@ -64,7 +64,7 @@ func Configure(r *gin.Engine) {
 	if err := db.Connect(); err != nil {
 		log.Fatal("db fatal:", err)
 	}
-	var authMiddleware = myjwt.GinJWTMiddlewareInit(jwt.AllUserAuthorizator)
+	var authMiddleware = myjwt.GinJWTMiddlewareInit(&jwt.AllUserAuthorizator{})
 	r.NoRoute(authMiddleware.MiddlewareFunc(), jwt.NoRouteHandler)
 	r.POST("/login", authMiddleware.LoginHandler)
 	userAPI := r.Group("/user")
@@ -78,7 +78,7 @@ func Configure(r *gin.Engine) {
 		userAPI.POST("/logout", user.Logout)
 	}
 
-	var adminMiddleware = myjwt.GinJWTMiddlewareInit(jwt.AdminAuthorizator)
+	var adminMiddleware = myjwt.GinJWTMiddlewareInit(&jwt.AdminAuthorizator{})
 	apiv1 := r.Group("/api/v1")
 	//使用AdminAuthorizator中间件，只有admin权限的用户才能获取到接口
 	apiv1.Use(adminMiddleware.MiddlewareFunc())

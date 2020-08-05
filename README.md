@@ -8,13 +8,13 @@
 
 * 该项目是gin+vue的前后端分离项目，使用gorm访问MySQL
 
-* 项目结构进行分层，使用依赖注入的方式对项目进行解耦---[Gin实现依赖注入教程](https://bingjian-zhu.github.io/2019/11/06/Gin%E5%AE%9E%E7%8E%B0%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/)
+* 项目结构进行分层，使用依赖注入的方式对项目进行解耦---[Gin实现依赖注入教程](https://www.cnblogs.com/FireworksEasyCool/p/11805148.html)
 
-* 使用jwt，对API接口进行权限控制---[gin-jwt对API进行权限控制教程](https://bingjian-zhu.github.io/2019/09/03/gin-jwt%E5%AF%B9API%E8%BF%9B%E8%A1%8C%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/)
+* 使用jwt，对API接口进行权限控制---[gin-jwt对API进行权限控制教程](https://www.cnblogs.com/FireworksEasyCool/p/11455834.html)
 
-* 使用[go-playground/validator](https://github.com/go-playground/validator)开源库简化gin的请求校验---[gin请求数据校验教程](https://bingjian-zhu.github.io/2020/04/28/gin%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C/)
+* 使用[go-playground/validator](https://github.com/go-playground/validator)开源库简化gin的请求校验---[gin请求数据校验教程](https://www.cnblogs.com/FireworksEasyCool/p/12794311.html)
 
-* 用Docker上云---[多阶段构建Golang程序Docker镜像教程](https://bingjian-zhu.github.io/2020/05/06/%E5%A4%9A%E9%98%B6%E6%AE%B5%E6%9E%84%E5%BB%BAGolang%E7%A8%8B%E5%BA%8FDocker%E9%95%9C%E5%83%8F/)
+* 用Docker上云---[多阶段构建Golang程序Docker镜像教程](https://www.cnblogs.com/FireworksEasyCool/p/12838875.html)
 
 * 在token过期后的半个小时内，用户再次操作会自动刷新token
 

@@ -28,14 +28,11 @@ type JWT struct {
 	RoleService service.IRoleService `inject:""`
 }
 
-// JwtAuthorizator 定义身份授权事件类型
-type JwtAuthorizator func(data interface{}, c *gin.Context) bool
-
 //app 程序配置
 var app = setting.Config.APP
 
 //GinJWTMiddlewareInit 初始化中间件
-func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator JwtAuthorizator) (authMiddleware *jwt.GinJWTMiddleware) {
+func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator IAuthorizator) (authMiddleware *jwt.GinJWTMiddleware) {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "test zone",
 		Key:         []byte("secret key"),
@@ -84,7 +81,7 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator JwtAuthorizator) (authMiddlew
 			return nil, jwt.ErrFailedAuthentication
 		},
 		//receives identity and handles authorization logic
-		Authorizator: jwtAuthorizator,
+		Authorizator: jwtAuthorizator.HandleAuthorizator,
 		//handles unauthorized logic
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			c.JSON(code, gin.H{
@@ -115,33 +112,6 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator JwtAuthorizator) (authMiddlew
 		log.Fatal("JWT Error:" + err.Error())
 	}
 	return
-}
-
-//AdminAuthorizator role is admin can access
-func AdminAuthorizator(data interface{}, c *gin.Context) bool {
-	if v, ok := data.(*models.UserRole); ok {
-		for _, itemRole := range v.UserRoles {
-			if itemRole.Value == "admin" {
-				return true
-			}
-		}
-	}
-
-	return false
-}
-
-//TestAuthorizator username is test can access
-func TestAuthorizator(data interface{}, c *gin.Context) bool {
-	if v, ok := data.(*models.UserRole); ok && v.UserName == "test" {
-		return true
-	}
-
-	return false
-}
-
-//AllUserAuthorizator all users access
-func AllUserAuthorizator(data interface{}, c *gin.Context) bool {
-	return true
 }
 
 //NoRouteHandler 404 handler
