@@ -88,7 +88,7 @@ CREATE TABLE `go_role` (
   `user_name` varchar(50) NOT NULL DEFAULT '' COMMENT '账号，冗余设计',
   `value` varchar(50) DEFAULT '' COMMENT 'role值',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for go_menus
@@ -108,7 +108,7 @@ CREATE TABLE `go_menus` (
   `modified_on` datetime  DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   `modified_by` varchar(255) DEFAULT '' COMMENT '修改人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for go_role_menu
@@ -119,7 +119,7 @@ CREATE TABLE `go_role_menu` (
   `role_id` int(10) unsigned NOT NULL COMMENT '角色ID',
   `menu_id` int(10) unsigned NOT NULL COMMENT '菜单ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- 插入数据
