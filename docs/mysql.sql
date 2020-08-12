@@ -59,7 +59,7 @@ CREATE TABLE `go_user` (
   `modified_on` datetime  DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   `modified_by` varchar(255) DEFAULT '' COMMENT '修改人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for go_tag
