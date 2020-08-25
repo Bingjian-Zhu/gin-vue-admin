@@ -1,10 +1,10 @@
 # gin-vue-admin
-* [演示地址](http://zbj-home.picp.io)：入门级服务器，请轻点~~
+~~* [演示地址](http://zbj-home.picp.io)：入门级服务器，请轻点~~
 
 * 以动态路由的方式实现不同的角色加载不同的菜单
 
-> 账号：admin  密码：111111
-> 账号：test   密码：111111
+~~> 账号：admin  密码：111111
+~~> 账号：test   密码：111111
 
 * 该项目是gin+vue的前后端分离项目，使用gorm访问MySQL
 
